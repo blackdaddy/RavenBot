@@ -44,7 +44,7 @@ $y += 30
 GUICtrlCreateLabel("Reconnect Timeout", $x, $y)
 $comboReconnectTimeout = GUICtrlCreateCombo("", $x + 120, $y - 2, 100, $h)
 $y += 25
-$labelRemainingReconnectTime = GUICtrlCreateLabel("Remaining Time : ", $x, $y, 200, 30)
+$labelRemainingReconnectTime = GUICtrlCreateLabel("Reconnect : --:--:--", $x, $y, 200, 30)
 GUICtrlSetColor($labelRemainingReconnectTime, $COLOR_RED)
 GUICtrlSetState($labelRemainingReconnectTime, $GUI_HIDE)
 
@@ -388,6 +388,7 @@ EndFunc
 
 Func clearStats()
    $loopCount = 0
+   $errorCount = 0
    $lastElapsed = "--:--:--"
    $raidAttackCount = 0
    $pvpAttackCount = 0
@@ -409,6 +410,6 @@ Func updateRemainingReconnectStatus($msec)
    Local $iSec, $iMin, $iHour
    Local $time = _TicksToTime($msec, $iHour, $iMin, $iSec)
    Local $s = StringFormat("%02i:%02i:%02i", $iHour, $iMin, $iSec)
-   Local $text = "Remaining Time : " & $s
+   Local $text = "Reconnect : " & $s
    GUICtrlSetData($labelRemainingReconnectTime, $text)
 EndFunc

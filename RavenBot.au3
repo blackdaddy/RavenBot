@@ -112,8 +112,8 @@ EndFunc   ;==>GUIControl
 Func runBot()
    _log("START" )
 
-   $loopCount = 0
    Local $iSec, $iMin, $iHour
+
    clearStats()
    updateStats()
 

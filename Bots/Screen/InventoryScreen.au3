@@ -19,7 +19,7 @@ Func waitInventoryScreen()
 		 If _Sleep($SleepWaitMSec) Then Return False
 
 		; Re-click inventory button on MainScreen
-		closeAllPopupOnMainScreen()
+		closeAllPopupOnMainScreen(False, False)
 		clickInventoryButton()
 		If _Sleep($SleepWaitMSec) Then ExitLoop
 	  Else

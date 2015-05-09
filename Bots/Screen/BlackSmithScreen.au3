@@ -23,7 +23,7 @@ Func waitBlacksmithScreen()
 		 If _Sleep($SleepWaitMSec) Then Return False
 
          ; Re-click blacksmith button on MainScreen
-		 closeAllPopupOnMainScreen()
+		 closeAllPopupOnMainScreen(False, False)
 		 clickBlackSmithButton()
 		 If _Sleep($SleepWaitMSec) Then ExitLoop
 	  Else

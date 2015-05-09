@@ -243,7 +243,7 @@ Func clickOkButton()
 EndFunc
 
 
-Func closeAllPopupOnMainScreen($forceMode = False)
+Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    Local $color = $COLOR_PINK
    Local $x, $y
@@ -260,9 +260,11 @@ Func closeAllPopupOnMainScreen($forceMode = False)
 	  Return True
    EndIf
 
-   If ClickButtonImageArea(String(@ScriptDir & "\images\button_back.bmp"), $BACK_BUTTON_REGION) Then
-	  SetLog("Back button clicked.", $color)
-	  Return True
+   If $clickBackButton Then
+	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_back.bmp"), $BACK_BUTTON_REGION) Then
+		 SetLog("Back button clicked.", $color)
+		 Return True
+	  EndIf
    EndIf
 
    If ClickButtonImageArea(String(@ScriptDir & "\images\screen_start.bmp"), $GAME_START_REGION) Then
