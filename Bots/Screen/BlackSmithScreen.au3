@@ -22,13 +22,8 @@ Func waitBlacksmithScreen()
 	  If ImageSearchArea($bmpPath, 0, $LEFT_TOP_SCREEN_NAME_REGION, $x, $y, 30) = False Then
 		 If _Sleep($SleepWaitMSec) Then Return False
 
-		 ; Checking RAID
-		 If ClickButtonImage(String(@ScriptDir & "\images\button_raid_close.bmp")) Then
-			SetLog("Raid Detected.", $COLOR_BLUE)
-		 EndIf
-
          ; Re-click blacksmith button on MainScreen
-
+		 closeAllPopupOnMainScreen()
 		 clickBlackSmithButton()
 		 If _Sleep($SleepWaitMSec) Then ExitLoop
 	  Else

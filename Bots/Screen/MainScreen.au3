@@ -12,7 +12,6 @@ Local Const $MAIN_QUEST_COSE_BUTTON_POS[2] = [720, 442]
 
 Local Const $MAIN_SCREEN_CHECK_REGION = [404, 380, 532, 468]
 Local Const $RAID_POPUP_CLOSE_BUTTON_REGION = [209, 206, 572, 376]
-Local Const $ARCHIEVEMENT_POPUP_CLOSE_BUTTON_REGION = [631, 378, 761, 474]
 
 Func waitMainScreen() ;Waits for main screen to popup
    SetLog("Waiting for Main Screen", $COLOR_ORANGE)
@@ -242,6 +241,7 @@ Func clickOkButton()
    EndIf
    Return 0
 EndFunc
+
 
 Func closeAllPopupOnMainScreen($forceMode = False)
 
