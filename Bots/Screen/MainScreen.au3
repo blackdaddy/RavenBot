@@ -356,8 +356,13 @@ Func closeAllPopupOnMainScreen($forceMode = False)
 	  Return True
    EndIf
 
-    If ClickButtonImageArea(String(@ScriptDir & "\images\button_web_close.bmp"), $NOTICE_POPUP_CLOSE_BUTTON_REGION) Then
+   If ClickButtonImageArea(String(@ScriptDir & "\images\button_web_close.bmp"), $NOTICE_POPUP_CLOSE_BUTTON_REGION) Then
 	  SetLog("Web Popup detected.", $color)
+	  Return True
+   EndIf
+
+   If ClickButtonImageArea(String(@ScriptDir & "\images\button_game_close.bmp"), $NORMAL_CLOSE_BUTTON_REGION) Then
+	  SetLog("Game close button detected.", $color)
 	  Return True
    EndIf
 

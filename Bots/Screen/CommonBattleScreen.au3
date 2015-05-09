@@ -11,18 +11,28 @@ Local Const $POTION_EAT_DELAY_MSEC = 6000
 Func waitBattleScreen()
    SetLog("Waiting for Battle Screen", $COLOR_ORANGE)
 
+   Local $x, $y
+
    For $i = 0 To $RetryWaitCount
 	  _CaptureRegion()
 
 	  If WaitScreenPixel($BATTLE_COLOR, True) = False Then
 
-		 If _Sleep(100) Then Return False
-
 		 clickBattleStartButton(False)
 
+		 ; For stamina lack popup
+		 _CaptureRegion()
+
+		 If _ImageSearchArea(String(@ScriptDir & "\images\stamina_lack_text.bmp"), 0, 276, 174, 400, 221, $x, $y, $DefaultTolerance) Then
+			ClickButtonImageArea(String(@ScriptDir & "\images\button_close.bmp"), $POPUP_BUTTON_REGION)
+			SetLog("Stamina lack popup detected.", $COLOR_PINK)
+			_Sleep(1000)
+			Return False
+		 EndIf
+
+		 ; For lack of baggage popup. just go
 		 If ClickButtonImageArea(String(@ScriptDir & "\images\button_battle_start_small.bmp"), $POPUP_BUTTON_REGION) Then
-			SetLog("[Battle Start] button clicked.", $color)
-			Return
+			SetLog("[Battle Start] button clicked.", $COLOR_PINK)
 		 EndIf
 
 		 ;If _Sleep($SleepWaitMSec) Then Return False	; already sleep in clickBattleStartButton method
