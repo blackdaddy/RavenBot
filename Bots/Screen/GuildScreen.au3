@@ -15,12 +15,12 @@ Func waitGuildScreen()
 
 		 ; Checking RAID
 		 If ClickButtonImage(String(@ScriptDir & "\images\button_raid_close.bmp")) Then
-			SetLog("Raid Detected.", $COLOR_PINK)
+			SetLog("Raid detected.", $COLOR_PINK)
 		 EndIf
 
 		 ; In this Pvp screen, this server disconnected popup can show up often. So just close the popup and try reconnect
 		 If ClickButtonImageArea(String(@ScriptDir & "\images\button_retry.bmp"), $POPUP_BUTTON_REGION) Then
-			SetLog("Retry button Detected.", $COLOR_PINK)
+			SetLog("Retry button detected.", $COLOR_PINK)
 		 EndIf
 
 		 ; Re-click adventure button on MainScreen

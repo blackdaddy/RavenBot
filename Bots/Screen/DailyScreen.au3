@@ -151,7 +151,7 @@ Func doTempleBattle()
 	  EndIf
 
 	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_retry.bmp"), $POPUP_BUTTON_REGION) Then
-		 SetLog("Retry Button Detected.", $COLOR_RED)
+		 SetLog("Retry Button detected.", $COLOR_RED)
 		 ExitLoop
 	  EndIf
 

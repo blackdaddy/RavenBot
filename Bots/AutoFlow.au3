@@ -158,7 +158,9 @@ Func doPvpBattle()
    EndIf
 
    ; Select Buff Item If you need
-   selectBuffItem($Id_Pvp)
+   If selectBuffItem($Id_Pvp) = False Then
+	  Return False
+   EndIf
 
    ; Click Battle button
    clickBattleStartButton()
@@ -183,7 +185,9 @@ Func doGuildBattle()
    EndIf
 
    ; Select Buff Item If you need
-   selectBuffItem($Id_Guild)
+   If selectBuffItem($Id_Guild) = False Then
+	  Return False
+   EndIf
 
    ; Click Battle button
    clickBattleStartButton()
@@ -217,7 +221,9 @@ Func doDailyBattle()
 	  EndIf
 
 	  ; Select Buff Item If you need
-	  selectBuffItem($Id_Daily)
+	  If selectBuffItem($Id_Daily) = False Then
+		 Return
+	  EndIf
 
 	  ; Start Battle
 	  clickBattleStartButton()
@@ -253,7 +259,9 @@ Func doRaidBattle()
    EndIf
 
    ; Select Buff Item If you need
-   selectBuffItem($Id_Raid)
+   If selectBuffItem($Id_Raid) = False Then
+	  Return
+   EndIf
 
    ; Start Battle
    clickBattleStartButton()
@@ -283,7 +291,9 @@ Func doAdventureBattle()
    EndIf
 
    ; Select Buff Item If you need
-   selectBuffItem($Id_Adventure)
+   If selectBuffItem($Id_Adventure) = False Then
+	  Return False
+   EndIf
    If $Restart Then Return False
 
    ; Start Battle

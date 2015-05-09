@@ -48,7 +48,7 @@ Func _checkRetry(ByRef $retryCount)
    Local $x, $y
    Local $bmpPath = @ScriptDir & "\images\button_retry.bmp"
    If ImageSearchArea($bmpPath, 0, $POPUP_BUTTON_REGION, $x, $y, $DefaultTolerance) = False Then
-	  SetLog("Retry button Detected.", $COLOR_PINK)
+	  SetLog("Retry button detected.", $COLOR_PINK)
 	  If $retryCount < $MAX_RETRY_CLICK_COUNT Then
 		 Click($x, $y)
 		 $retryCount = $retryCount + 1
