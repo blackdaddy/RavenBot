@@ -223,9 +223,7 @@ Func doDailyBattle()
 	  clickBattleStartButton()
 
 	  ; Do Battle!
-	  doBattle($Id_Adventure)
-
-	  $ok = True
+	  $ok = doBattle($Id_Adventure)
    ElseIf checkActiveDailyTempleStatus() Then
 	  If waitDailyTempleScreen() = False Then
 		 Return
@@ -235,9 +233,7 @@ Func doDailyBattle()
 	  clickBattleStartButton()
 
 	  ; Do Battle!
-	  doTempleBattle()
-
-	  $ok = True
+	  $ok = doTempleBattle()
    EndIf
 
    If $ok Then
@@ -263,10 +259,10 @@ Func doRaidBattle()
    clickBattleStartButton()
 
    ; Do Battle!
-   doBattle($Id_Raid)
-
-   $raidAttackCount = $raidAttackCount + 1
-   updateStats()
+   If doBattle($Id_Raid) Then
+	  $raidAttackCount = $raidAttackCount + 1
+	  updateStats()
+   EndIf
 
 EndFunc	;==>doRaidBattle
 

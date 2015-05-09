@@ -63,7 +63,7 @@ Func doBattle($battleId)
 	  If _selectAutoBattle() Then
 		 ; Wait for reaching to Enemy
 		 If $firstLoop Then
-			If _Sleep(5500) Then Return
+			If _Sleep(5500) Then Return False
 		 EndIf
 		 $firstLoop	= False
 	  EndIf
@@ -72,7 +72,7 @@ Func doBattle($battleId)
 		 SetLog("Unexpected battle detected...", $COLOR_RED)
 		 SaveImageToFile("battle_error_timeout");
 		 $RunState = True
-		 Return
+		 Return False
 	  EndIf
 
 	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_retry.bmp"), $POPUP_BUTTON_REGION) Then
@@ -90,7 +90,7 @@ Func doBattle($battleId)
 		 ExitLoop
 	  EndIf
 
-	  If _Sleep(2000) Then Return
+	  If _Sleep(2000) Then Return False
 
 	  ; Health Check
 	  If $setting_eat_potion[$battleId] Then
@@ -120,8 +120,10 @@ Func doBattle($battleId)
    WEnd
 
    ; Click Main Button
-   ClickButtonImageArea(String(@ScriptDir & "\images\button_main_screen.bmp"), $RESULT_MAIN_SCREEN_BUTTON_REGION)
-
+   If ClickButtonImageArea(String(@ScriptDir & "\images\button_main_screen.bmp"), $RESULT_MAIN_SCREEN_BUTTON_REGION) Then
+	  Return True
+   EndIf
+   Return False
 EndFunc	;==>doBattleScreen()
 
 

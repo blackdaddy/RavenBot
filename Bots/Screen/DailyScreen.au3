@@ -147,7 +147,7 @@ Func doTempleBattle()
 		 SetLog("Unexpected battle detected...", $COLOR_RED)
 		 SaveImageToFile("battle_error_timeout");
 		 $RunState = True
-		 Return
+		 Return False
 	  EndIf
 
 	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_retry.bmp"), $POPUP_BUTTON_REGION) Then
@@ -176,6 +176,9 @@ Func doTempleBattle()
    WEnd
 
    ; Click Main Button
-   ClickButtonImageArea(String(@ScriptDir & "\images\button_main_screen.bmp"), $RESULT_MAIN_SCREEN_BUTTON_REGION)
+   If ClickButtonImageArea(String(@ScriptDir & "\images\button_main_screen.bmp"), $RESULT_MAIN_SCREEN_BUTTON_REGION) Then
+	  Return True
+   EndIf
+   Return False
 EndFunc	;==>doTempleBattle
 
