@@ -206,6 +206,9 @@ $y = $contentPaneY
 $h = 20
 $w = 120
 
+$checkDailyAdventureEnabled = GUICtrlCreateCheckbox("Daily Adventure", $x, $y, $w, 25)
+$y += 30
+
 $comboDailyLevel = GUICtrlCreateCombo("", $x, $y, 100, 20)
 $y += 30
 
@@ -303,6 +306,8 @@ Func btnStart()
 
    _log("START BUTTON CLICKED" )
 
+   $hTotalTimer = TimerInit()
+
    _GUICtrlEdit_SetText($txtLog, "")
    _WinAPI_EmptyWorkingSet(WinGetProcess($Title)) ; Reduce BlueStacks Memory Usage
 
@@ -390,17 +395,27 @@ Func clearStats()
    $loopCount = 0
    $errorCount = 0
    $lastElapsed = "--:--:--"
+   $totalElapsed = "--:--:--"
    $raidAttackCount = 0
    $pvpAttackCount = 0
    $guildAttackCount = 0
    $dailyAttackCount = 0
    $itemSoldCount = 0
+   $totalErrorCount = 0
 EndFunc
 
 
 Func updateStats()
 
-   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Error : " & $errorCount
+   If $RunState Then
+	  Local $iSec, $iMin, $iHour
+	  Local $time = _TicksToTime(Int(TimerDiff($hTotalTimer)), $iHour, $iMin, $iSec)
+	  $totalElapsed = StringFormat("%02i:%02i:%02i", $iHour, $iMin, $iSec)
+   Else
+	  $totalElapsed = "--:--:--"
+   EndIf
+
+   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & "(" & $totalElapsed & ")" & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Error : " & $errorCount & "(" & $totalErrorCount & ")"
 
    GUICtrlSetData($txtStats, $text)
 EndFunc

@@ -47,7 +47,7 @@ Func _checkRetry(ByRef $retryCount)
    ; In this Pvp screen, this server disconnected popup can show up often. So just close the popup and try reconnect
    Local $x, $y
    Local $bmpPath = @ScriptDir & "\images\button_retry.bmp"
-   If ImageSearchArea($bmpPath, 0, $POPUP_BUTTON_REGION, $x, $y, $DefaultTolerance) = False Then
+   If ImageSearchArea($bmpPath, 0, $POPUP_BUTTON_REGION, $x, $y, $DefaultTolerance) Then
 	  SetLog("Retry button detected.", $COLOR_PINK)
 	  If $retryCount < $MAX_RETRY_CLICK_COUNT Then
 		 Click($x, $y)

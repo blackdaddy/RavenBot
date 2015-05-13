@@ -24,6 +24,10 @@ EndFunc	;==>waitDailyScreen
 
 Func checkActiveDailyAdventureStatus()
 
+   If $setting_daily_adventure_enabled = False Then
+	  Return False
+   EndIf
+
    Local $bmpPath = @ScriptDir & "\images\todo_on_icon.bmp"
 
    If _ImageSearchArea($bmpPath, 0, 160, 95, 175, 109, $x, $y, $DefaultTolerance) Then
@@ -77,12 +81,18 @@ Func waitDailyTempleScreen()
 	  Local $x, $y
 	  Local $bmpPath = @ScriptDir & "\images\daily_temple_text.bmp"
 	  If ImageSearchArea($bmpPath, 0, $LEFT_TOP_SCREEN_NAME_REGION, $x, $y, 30) = False Then
+
+		 If waitBattleScreen(True) Then
+			SetLog("Daily Temple Screen Skipped", $COLOR_BLUE)
+			Return True
+		 EndIf
+
 		 If _Sleep($SleepWaitMSec) Then Return False
 
 		 ; Re-click daily adventure enter button
 		 Click(548, 405);
 
-		 If _Sleep(2500) Then ExitLoop
+		 If _Sleep(5000) Then ExitLoop	; we need to give enough time for loading friend characters..
 	  Else
 		 SetLog("Daily Temple Screen Located", $COLOR_BLUE)
 		 Return True

@@ -16,6 +16,7 @@ Global $setting_pvp_enabled = False
 Global $setting_raid_enabled = True
 Global $setting_guild_enabled = True
 Global $setting_daily_enabled = False
+Global $setting_daily_adventure_enabled = True
 Global $setting_daily_level = 1	; 0~2
 Global $setting_remaining_health_index[$MaxBattleTypeCount] = [4, 4, 4, 4, 4]
 Global $setting_reconnect_timeout_index = 0
@@ -25,7 +26,11 @@ Local $setting_common_group = "Raven"
 
 
 Func currentReconnectTimeout()
-   Return $SETTING_RECONNECT_TIMEOUT[$setting_reconnect_timeout_index] * 60 * 1000
+   Local $index = _GUICtrlComboBox_GetCurSel($comboReconnectTimeout)
+   If $index < 0 Then
+	  $index = $setting_reconnect_timeout_index
+   EndIf
+   Return $SETTING_RECONNECT_TIMEOUT[$index] * 60 * 1000
 EndFunc
 
 Func healthConditionPercent($battleId)
@@ -42,6 +47,7 @@ Func loadConfig()
 	  $setting_raid_enabled = IniRead($config, $setting_common_group, "enabled_raid", "False") == "True" ? True : False
 	  $setting_guild_enabled = IniRead($config, $setting_common_group, "enabled_guild", "False") == "True" ? True : False
 	  $setting_daily_enabled = IniRead($config, $setting_common_group, "enabled_daily", "False") == "True" ? True : False
+	  $setting_daily_adventure_enabled = IniRead($config, $setting_common_group, "enabled_daily_adventure", "True") == "True" ? True : False
 
 	  $setting_stage_major = Int(IniRead($config, $setting_common_group, "stage_major", "7"))
 	  $setting_stage_minor = Int(IniRead($config, $setting_common_group, "stage_minor", "2"))
@@ -116,6 +122,12 @@ Func applyConfig()
 	  GUICtrlSetState($checkDailyEnabled, $GUI_UNCHECKED)
    EndIf
 
+    If $setting_daily_adventure_enabled = 1 Then
+	  GUICtrlSetState($checkDailyAdventureEnabled, $GUI_CHECKED)
+   Else
+	  GUICtrlSetState($checkDailyAdventureEnabled, $GUI_UNCHECKED)
+   EndIf
+
    If $setting_guild_enabled = 1 Then
 	  GUICtrlSetState($checkGuildEnabled, $GUI_CHECKED)
    Else
@@ -142,6 +154,7 @@ Func saveConfig()
    IniWrite($config, $setting_common_group, "enabled_raid", _IsChecked($checkRaidEnabled))
    IniWrite($config, $setting_common_group, "enabled_guild", _IsChecked($checkGuildEnabled))
    IniWrite($config, $setting_common_group, "enabled_daily", _IsChecked($checkDailyEnabled))
+   IniWrite($config, $setting_common_group, "enabled_daily_adventure", _IsChecked($checkDailyAdventureEnabled))
 
    For $i = 0 To $MaxBattleTypeCount - 1
 	  IniWrite($config, $setting_common_group, "use_buff_" & $i & "_1", _IsChecked($checkBuffAttack[$i]))

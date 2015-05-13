@@ -8,7 +8,7 @@ Local Const $RESULT_MAIN_SCREEN_BUTTON_REGION[4] = [29, 418, 593, 473]
 
 Local Const $POTION_EAT_DELAY_MSEC = 6000
 
-Func waitBattleScreen()
+Func waitBattleScreen($checkMode = False)
    SetLog("Waiting for Battle Screen", $COLOR_ORANGE)
 
    Local $x, $y
@@ -17,6 +17,8 @@ Func waitBattleScreen()
 	  _CaptureRegion()
 
 	  If WaitScreenPixel($BATTLE_COLOR, True) = False Then
+
+		 If $checkMode Then Return False
 
 		 clickBattleStartButton(False)
 
@@ -37,6 +39,7 @@ Func waitBattleScreen()
 
 		 ;If _Sleep($SleepWaitMSec) Then Return False	; already sleep in clickBattleStartButton method
 	  Else
+		 If $checkMode Then Return True
 		 SetLog("Battle Screen Located", $COLOR_BLUE)
 		 Return True
 	  EndIf

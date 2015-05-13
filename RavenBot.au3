@@ -2,12 +2,12 @@
 
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
-#pragma compile(ProductVersion, 1.4)
-#pragma compile(FileVersion, 1.4)
+#pragma compile(ProductVersion, 1.5)
+#pragma compile(FileVersion, 1.5)
 #pragma compile(LegalCopyright, ?The Bytecode Club)
 
 $sBotName = "Raven Bot"
-$sBotVersion = "1.4"
+$sBotVersion = "1.5"
 $sBotTitle = "AutoIt " & $sBotName & " v" & $sBotVersion
 
 If _Singleton($sBotTitle, 1) = 0 Then
@@ -150,6 +150,7 @@ Func runBot()
 		 EndIf
 
 		 $errorCount = $errorCount + 1
+		 $totalErrorCount = $totalErrorCount + 1
 		 updateStats()
 
 		 If $errorCount = 1 Then

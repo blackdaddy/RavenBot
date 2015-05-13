@@ -12,6 +12,7 @@ Local Const $MAIN_QUEST_COSE_BUTTON_POS[2] = [720, 442]
 
 Local Const $MAIN_SCREEN_CHECK_REGION = [404, 380, 532, 468]
 Local Const $RAID_POPUP_CLOSE_BUTTON_REGION = [209, 206, 572, 376]
+Local Const $PVP_LOADING_MARK_REGION = [312, 179, 431, 300]
 
 Func waitMainScreen() ;Waits for main screen to popup
    SetLog("Waiting for Main Screen", $COLOR_ORANGE)
@@ -53,7 +54,7 @@ Func checkStamina()
    Local $lack = False
    Local $checkingLongTime = False
    While $RunState
-	  If _Sleep(100) Then Return
+	  If _Sleep(5000) Then Return
 
 	  _CaptureRegion()
 
@@ -365,6 +366,12 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    If ClickButtonImageArea(String(@ScriptDir & "\images\button_game_close.bmp"), $NORMAL_CLOSE_BUTTON_REGION) Then
 	  SetLog("Game close button detected.", $color)
+	  Return True
+   EndIf
+
+   ; For PvP screen
+   If ClickButtonImageArea(String(@ScriptDir & "\images\button_pvp_loading.bmp"), $PVP_LOADING_MARK_REGION) Then
+	  SetLog("PvP loading detected.", $color)
 	  Return True
    EndIf
 

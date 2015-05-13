@@ -81,12 +81,15 @@ Global Const $SETTING_RECONNECT_TIMEOUT[8] = [1, 5, 10, 15, 30, 45, 60, 120]
 ; ---------- STATS ----------
 Global $loopCount = 1
 Global $lastElapsed = ""
+Global $totalElapsed = ""
 Global $raidAttackCount = 0
 Global $pvpAttackCount = 0
 Global $guildAttackCount = 0
 Global $dailyAttackCount = 0
 Global $itemSoldCount = 0
 Global $errorCount = 0
+Global $totalErrorCount = 0
+Global $hTotalTimer
 
 ; ---------- REGIONS ------------
 Global Const $LEFT_TOP_SCREEN_NAME_REGION[4] = [70, 9, 135, 38]
