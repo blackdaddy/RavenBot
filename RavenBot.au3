@@ -2,12 +2,12 @@
 
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
-#pragma compile(ProductVersion, 1.5)
-#pragma compile(FileVersion, 1.5)
+#pragma compile(ProductVersion, 1.6)
+#pragma compile(FileVersion, 1.6)
 #pragma compile(LegalCopyright, ?The Bytecode Club)
 
 $sBotName = "Raven Bot"
-$sBotVersion = "1.5"
+$sBotVersion = "1.6"
 $sBotTitle = "AutoIt " & $sBotName & " v" & $sBotVersion
 
 If _Singleton($sBotTitle, 1) = 0 Then
@@ -62,6 +62,8 @@ GUIRegisterMsg($WM_SYSCOMMAND, "GUIControl")
 ; Initialize
 DirCreate($dirLogs)
 DirCreate($dirCapture)
+DirCreate($dirLoots)
+
 _GDIPlus_Startup()
 CreateLogFile()
 
@@ -70,12 +72,17 @@ applyConfig()
 
 clearStats()
 updateStats()
+updateTotalElapsed()
 
-If $setting_win_x <> -1 OR $setting_win_y <> -1 Then
+If $setting_win_x <> -1 AND $setting_win_y <> -1 AND $setting_win_x <> -32000 OR $setting_win_y <> -32000  Then
    WinMove($mainView, "", $setting_win_x, $setting_win_y)
 EndIf
 
 GUISetState(@SW_SHOW, $mainView)
+
+If $setting_auto_start Then
+   btnStart()
+EndIf
 
 ; Just idle around
 While 1
@@ -98,6 +105,10 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 			   btnStop()
 			Case $btnScreenShot
 			   btnScreenShot()
+			Case $checkAutoStart
+			   saveConfig()
+			   loadConfig()
+			   applyConfig()
 			EndSwitch
 		Case 274
 			Switch $wParam
@@ -108,11 +119,17 @@ Func GUIControl($hWind, $iMsg, $wParam, $lParam)
 	Return $GUI_RUNDEFMSG
 EndFunc   ;==>GUIControl
 
+ contolsettext
+
 ; Main Auto Flow
 Func runBot()
    _log("START" )
+   SetLog("Welcome to " & $sBotTitle, $COLOR_PURPLE)
+   SetLog($Compiled & " running on " & @OSArch & " OS", $COLOR_GREEN)
+   SetLog("Bot is starting...", $COLOR_ORANGE)
 
    Local $iSec, $iMin, $iHour
+   Local $firstFlag = True
 
    clearStats()
    updateStats()
@@ -125,6 +142,32 @@ Func runBot()
    WEnd
 
    While $RunState
+
+	  If ProcessExists($ProcessName) = False Then
+
+		 SetLog($Title & " starting...", $COLOR_ORANGE)
+
+		 runBlueStack()
+
+		 If _Sleep(5000) Then Return ExitLoop
+
+		 ContinueLoop	; restart loop
+	  Else
+		 If isValidRunningEmulator() = False Then
+			SetLog($Title & " initializing...", $COLOR_ORANGE)
+
+			If _Sleep(5000) Then Return ExitLoop
+			ContinueLoop	; restart loop
+		 EndIf
+
+		 If Initiate() = False Then
+			SetLog("Failed to initialize " & $Title, $COLOR_RED)
+			If _Sleep(2000) Then Return ExitLoop
+			ContinueLoop	; restart loop
+		 EndIf
+	  EndIf
+
+	  WinMove($Title, "", 0, 0)
 	  WinActivate($Title)
 
 	  Local $hTimer = TimerInit()

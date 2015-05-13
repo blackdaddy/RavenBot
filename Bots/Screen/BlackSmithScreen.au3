@@ -105,6 +105,12 @@ Func sellItems(ByRef $newBadgeCount)
 
 		 Local $itemLevel = getItemLevel()
 
+		 If $itemLevel >= $setting_loot_capture_level Then
+			_log("@@@@@@@ Loot Item @@@@@@@ : " & $itemLevel)
+			 _CaptureRegion()
+			SaveImageToFile("loot_" & $itemLevel, $dirLoots);
+		 EndIf
+
 		 If $itemLevel <= $setting_item_sell_maximum_level Then
 			_log("$$$$$$$ Item sold $$$$$$$ : " & $itemLevel & $setting_item_sell_maximum_level )
 
@@ -112,7 +118,6 @@ Func sellItems(ByRef $newBadgeCount)
 			   $itemSlotNumber = $itemSlotNumber + 1
 			   If _clickCloseButton() = False Then Return False
 			EndIf
-
 		 Else
 			$itemSlotNumber = $itemSlotNumber + 1
 			If _clickCloseButton() = False Then Return False

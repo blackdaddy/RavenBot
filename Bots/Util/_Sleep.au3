@@ -5,7 +5,7 @@ Func _Sleep($iDelay, $bAllowPause = True)
 	  While ($PauseBot And $bAllowPause)
 		 Sleep(1000)
 	  WEnd
-	  updateStats()
+	  updateTotalElapsed()
 	  tabChanged()
 	  Sleep(($iDelay > 50) ? 50 : 1)
    WEnd

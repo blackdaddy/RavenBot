@@ -7,9 +7,9 @@ Local $contentPaneY = $tabY + 30
 
 Local $gap = 10
 Local $generalRightHeight = 240
-Local $generalBottomHeight = 70
+Local $generalBottomHeight = 90
 Local $logViewWidth = 260
-Local $logViewHeight = 300
+Local $logViewHeight = 320
 Local $frameWidth = $contentPaneX + $logViewWidth + $gap + $generalRightHeight + $tabX
 Local $frameHeight = $contentPaneY + $logViewHeight + $gap + $generalBottomHeight + $tabY
 
@@ -38,16 +38,22 @@ GUICtrlCreateTabItem("General")
 
 $x = $generalRightX
 $y = $contentPaneY + 5
+$w = 80
+Local $labelW = 137
 GUICtrlCreateLabel("Sell Item Max Level", $x, $y)
-$comboSellItemLevel = GUICtrlCreateCombo("", $x + 120, $y - 2, 100, $h)
+$comboSellItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
+$y += 30
+GUICtrlCreateLabel("Screen Shot Item Level", $x, $y)
+$comboLootItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
 $y += 30
 GUICtrlCreateLabel("Reconnect Timeout", $x, $y)
-$comboReconnectTimeout = GUICtrlCreateCombo("", $x + 120, $y - 2, 100, $h)
+$comboReconnectTimeout = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
 $y += 25
 $labelRemainingReconnectTime = GUICtrlCreateLabel("Reconnect : --:--:--", $x, $y, 200, 30)
 GUICtrlSetColor($labelRemainingReconnectTime, $COLOR_RED)
 GUICtrlSetState($labelRemainingReconnectTime, $GUI_HIDE)
 
+$w = 120
 $y += 20
 $checkDailyEnabled = GUICtrlCreateCheckbox("Daily Enabled", $x, $y, $w, 25)
 $y += 30
@@ -60,24 +66,33 @@ $checkGuildEnabled = GUICtrlCreateCheckbox("Guild Enabled", $x, $y, $w, 25)
 ; The Bot Status Screen
 $txtLog = _GUICtrlRichEdit_Create($mainView, "", $contentPaneX, $contentPaneY, $logViewWidth, $logViewHeight, BitOR($ES_MULTILINE, $ES_READONLY, $WS_VSCROLL, 8912))
 
+; Statistics
+Local Const $sFont = "Comic Sans Ms"
+$x = $generalRightX
+$y += 35
+$txtTotalElapsed = GUICtrlCreateLabel("", $x, $y, 200, 20);, BitOR($GUI_SS_DEFAULT_LABEL,$SS_GRAYFRAME))
+GUICtrlSetColor(-1, $COLOR_GREEN)
+GUICtrlSetFont(-1, 10, 800, 0, $sFont) ; Set the font of the previous control.
+$y += 18
+$txtStats = GUICtrlCreateLabel("", $x, $y, 200, 150);, BitOR($GUI_SS_DEFAULT_LABEL,$SS_GRAYFRAME))
+GUICtrlSetColor(-1, $COLOR_PURPLE)
+GUICtrlSetFont(-1, 10, 800, 0, $sFont) ; Set the font of the previous control.
+
 ; Start/Stop Button
 $x = $contentPaneX
+$y = $generalBottomY
+$h = 50
 Local $btnWidth = 90
-$btnStart = GUICtrlCreateButton("Start Bot", $x, $generalBottomY, $btnWidth, 50)
-$btnStop = GUICtrlCreateButton("Stop Bot", $x, $generalBottomY, $btnWidth, 50)
+$btnStart = GUICtrlCreateButton("Start Bot", $x, $generalBottomY, $btnWidth, $h)
+$btnStop = GUICtrlCreateButton("Stop Bot", $x, $generalBottomY, $btnWidth, $h)
 
 $x += $btnWidth
 $x += $gap
-$btnScreenShot = GUICtrlCreateButton("Screen Shot", $x, $generalBottomY, $btnWidth, 50)
+$btnScreenShot = GUICtrlCreateButton("Screen Shot", $x, $generalBottomY, $btnWidth, $h)
 
-
-; Statistics
-$x = $generalRightX
-$y += 35
-$txtStats = GUICtrlCreateLabel("", $x, $y, 200, 150);, BitOR($GUI_SS_DEFAULT_LABEL,$SS_GRAYFRAME))
-Local Const $sFont = "Comic Sans Ms"
-GUICtrlSetColor(-1, $COLOR_PURPLE)
-GUICtrlSetFont(-1, 10, 800, 0, $sFont) ; Set the font of the previous control.
+$x = $contentPaneX
+$y += ($h + 5)
+$checkAutoStart = GUICtrlCreateCheckbox("Run when Windows starts", $x, $y, 180, 25)
 
 
 ;-----------------------------------------------------------
@@ -243,8 +258,10 @@ For $i = 0 To UBound($SETTING_RECONNECT_TIMEOUT) - 1
 Next
 
 GUICtrlSetData($comboSellItemLevel, "None")
+GUICtrlSetData($comboLootItemLevel, "None")
 For $i = 1 To 6
    GUICtrlSetData($comboSellItemLevel, "Level " & $i)
+   GUICtrlSetData($comboLootItemLevel, "Level " & $i)
 Next
 
 For $i = 10 To 60 Step 10
@@ -317,9 +334,7 @@ Func btnStart()
    $RunState = True
    $PauseBot = False
 
-   saveConfig()
-
-   Initiate()
+   runBot()
 
 EndFunc
 
@@ -347,8 +362,17 @@ EndFunc
 ; Methods
 ;==================================
 
-Func Initiate()
+Func isValidRunningEmulator()
    If IsArray(ControlGetPos($Title, "_ctl.Window", $WindowClass)) Then
+	  Return True
+   EndIf
+
+   Return False
+EndFunc
+
+
+Func Initiate()
+   If isValidRunningEmulator() Then
 	  Local $BSsize = [ControlGetPos($Title, "_ctl.Window", $WindowClass)[2], ControlGetPos($Title, "_ctl.Window", $WindowClass)[3]]
 	  Local $fullScreenRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "FullScreen")
 	  Local $guestHeightRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "GuestHeight")
@@ -371,22 +395,15 @@ Func Initiate()
 		 $MsgRet = MsgBox(BitOR($MB_OKCANCEL, $MB_SYSTEMMODAL), "Restart Computer", "Restart your computer for the applied changes to take effect." & @CRLF & "If your BlueStacks is the correct size  (" & $DEFAULT_WIDTH & " x " & $DEFAULT_HEIGHT & "), click OK.", 10)
 		 If $MsgRet <> $IDOK Then
 			btnStop()
-			Return
+			Return False
 		 EndIf
 		 Exit
 	  EndIf
 
-	  WinMove($Title, "", 0, 0)
-	  WinActivate($Title)
-
-	  SetLog("Welcome to " & $sBotTitle, $COLOR_PURPLE)
-	  SetLog($Compiled & " running on " & @OSArch & " OS", $COLOR_GREEN)
-	  SetLog("Bot is starting...", $COLOR_ORANGE)
-
-	  runBot()
+	  Return True
    Else
 	  SetLog("Could not find " & $Title, $COLOR_RED)
-	  btnStop()
+	  Return False
    EndIf
 EndFunc
 
@@ -405,7 +422,7 @@ Func clearStats()
 EndFunc
 
 
-Func updateStats()
+Func updateTotalElapsed()
 
    If $RunState Then
 	  Local $iSec, $iMin, $iHour
@@ -415,7 +432,13 @@ Func updateStats()
 	  $totalElapsed = "--:--:--"
    EndIf
 
-   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & "(" & $totalElapsed & ")" & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Error : " & $errorCount & "(" & $totalErrorCount & ")"
+   Local $text = "Total Elapsed : " & $totalElapsed
+   GUICtrlSetData($txtTotalElapsed, $text)
+EndFunc
+
+Func updateStats()
+
+   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Error : " & $errorCount & "(" & $totalErrorCount & ")"
 
    GUICtrlSetData($txtStats, $text)
 EndFunc

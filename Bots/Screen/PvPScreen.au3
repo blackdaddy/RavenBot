@@ -94,6 +94,12 @@ Func startPvpBattle()
 		 Return False
 	  EndIf
 
+	  ; For checking if battle already started by some reason (miss click, or double click..)
+	  If _waitPvpBattleScreen(True) Then
+		 SetLog("PvP Battle Ready Screen Skipped", $COLOR_BLUE)
+		 Return True
+	  EndIf
+
 	  clickPvpReadyButton()
 
 	  If _Sleep(2500) Then Return False
@@ -163,7 +169,7 @@ Func doPvpBattleScreen()
 EndFunc	;==>doPvpBattleScreen
 
 
-Func _waitPvpBattleScreen()
+Func _waitPvpBattleScreen($checkMode = False)
    SetLog("Waiting for PvP Battle Screen", $COLOR_ORANGE)
 
    For $i = 0 To $RetryWaitCount
@@ -180,6 +186,9 @@ Func _waitPvpBattleScreen()
 		 SetLog("PvP Battle Screen Located", $COLOR_BLUE)
 		 Return True
 	  EndIf
+
+	  If $checkMode Then Return False
+
    Next
 
    SetLog("PvP Battle Screen Timeout", $COLOR_RED)

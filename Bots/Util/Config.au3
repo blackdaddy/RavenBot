@@ -4,6 +4,7 @@
 ; Settings Variable
 ; -----------------------------
 
+Global $setting_auto_start = True
 Global $setting_win_x = -1
 Global $setting_win_y = -1
 Global $setting_stage_major = 7
@@ -12,6 +13,7 @@ Global $setting_use_buff_items[$MaxBattleTypeCount][4] = [[False, False, False, 
 Global $setting_eat_potion[$MaxBattleTypeCount] = [True, True, True, True, True]
 Global $setting_item_sell = True
 Global $setting_item_sell_maximum_level = 1
+Global $setting_loot_capture_level = 3
 Global $setting_pvp_enabled = False
 Global $setting_raid_enabled = True
 Global $setting_guild_enabled = True
@@ -40,6 +42,7 @@ EndFunc
 
 Func loadConfig()
    If FileExists($config) Then
+	  $setting_auto_start = IniRead($config, $setting_common_group, "enabled_auto_start", "True") == "True" ? True : False
 	  $setting_win_x = Int(IniRead($config, $setting_common_group, "win_x", "-1"))
 	  $setting_win_y = Int(IniRead($config, $setting_common_group, "win_y", "-1"))
 
@@ -62,6 +65,7 @@ Func loadConfig()
 	  Next
 
 	  $setting_item_sell_maximum_level = Int(IniRead($config, $setting_common_group, "sell_item_level", "1"))
+	  $setting_loot_capture_level = Int(IniRead($config, $setting_common_group, "loot_item_level", "3"))
 	  $setting_reconnect_timeout_index = Int(IniRead($config, $setting_common_group, "reconnect_timeout_index", "2"))
 
 	  $setting_daily_level = Int(IniRead($config, $setting_common_group, "daily_level", "1"))
@@ -138,18 +142,30 @@ Func applyConfig()
    loadStageMinorCombo($setting_stage_major)
    _GUICtrlComboBox_SetCurSel($comboStageMinor, Int($setting_stage_minor) - 1)
 
+   _GUICtrlComboBox_SetCurSel($comboLootItemLevel, Int($setting_loot_capture_level))
    _GUICtrlComboBox_SetCurSel($comboSellItemLevel, Int($setting_item_sell_maximum_level))
    _GUICtrlComboBox_SetCurSel($comboReconnectTimeout, Int($setting_reconnect_timeout_index))
    _GUICtrlComboBox_SetCurSel($comboDailyLevel, Int($setting_daily_level))
+
+   If $setting_auto_start = True Then
+	  RegWrite("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce", "RavenBot", "REG_SZ", @ScriptDir & "\RavenBot.exe")
+	  GUICtrlSetState($checkAutoStart, $GUI_CHECKED)
+   Else
+	  RegDelete("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce", "RavenBot")
+	  GUICtrlSetState($checkAutoStart, $GUI_UNCHECKED)
+   EndIf
 
 EndFunc	;==>applyConfig
 
 
 Func saveConfig()
    Local $pos = WinGetPos($mainView)
-   IniWrite($config, $setting_common_group, "win_x", $pos[0])
-   IniWrite($config, $setting_common_group, "win_y", $pos[1])
+   If $pos[0] <> -32000 Then
+	  IniWrite($config, $setting_common_group, "win_x", $pos[0])
+	  IniWrite($config, $setting_common_group, "win_y", $pos[1])
+   EndIf
 
+   IniWrite($config, $setting_common_group, "enabled_auto_start", _IsChecked($checkAutoStart))
    IniWrite($config, $setting_common_group, "enabled_pvp", _IsChecked($checkPvpEnabled))
    IniWrite($config, $setting_common_group, "enabled_raid", _IsChecked($checkRaidEnabled))
    IniWrite($config, $setting_common_group, "enabled_guild", _IsChecked($checkGuildEnabled))
@@ -167,6 +183,7 @@ Func saveConfig()
    IniWrite($config, $setting_common_group, "stage_major", _GUICtrlComboBox_GetCurSel($comboStageMajor) + 1)
    IniWrite($config, $setting_common_group, "stage_minor", _GUICtrlComboBox_GetCurSel($comboStageMinor) + 1)
    IniWrite($config, $setting_common_group, "sell_item_level", _GUICtrlComboBox_GetCurSel($comboSellItemLevel))
+   IniWrite($config, $setting_common_group, "loot_item_level", _GUICtrlComboBox_GetCurSel($comboLootItemLevel))
    IniWrite($config, $setting_common_group, "daily_level", _GUICtrlComboBox_GetCurSel($comboDailyLevel))
    IniWrite($config, $setting_common_group, "reconnect_timeout_index", _GUICtrlComboBox_GetCurSel($comboReconnectTimeout))
 EndFunc	;==>saveConfig

@@ -20,6 +20,11 @@ Func waitMainScreen() ;Waits for main screen to popup
 	  Local $x, $y
 	  Local $bmpPath = @ScriptDir & "\images\screen_main.bmp"
 
+	  If ProcessExists($ProcessName) = False Then
+		 SetLog($TitleForLog & " not found.", $COLOR_RED)
+		 Return False
+	  EndIf
+
 	  _CaptureRegion()
 
 	  If ImageSearchArea($bmpPath, 0, $MAIN_SCREEN_CHECK_REGION, $x, $y, 30) Then
@@ -377,3 +382,11 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    Return False
 EndFunc	;==>closeAllPopupOnMainScreen
+
+
+Func runBlueStack()
+   Local $sWow64 = ""
+   If @AutoItX64 Then $sWow64 = "\Wow6432Node"
+   Local $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\BlueStacks", "InstallDir") & "\HD-StartLauncher.exe"
+   ShellExecute($sFile)
+EndFunc

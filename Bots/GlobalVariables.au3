@@ -27,6 +27,8 @@ Global Const $DEFAULT_WIDTH = 800
 Global Const $DEFAULT_HEIGHT = 480
 Global Const $REGISTRY_KEY_DIRECTORY = "HKEY_LOCAL_MACHINE\SOFTWARE\BlueStacks\Guests\Android\FrameBuffer\0"
 
+Global $TitleForLog = "BlueStacks" ; For display name for logging
+Global $ProcessName = "HD-Frontend.exe"
 Global $WindowClass = "[CLASS:BlueStacksApp; INSTANCE:1]"
 Global $Title = "BlueStacks App Player" ; Name of the Window
 ;Global $WindowClass = "[CLASS:Afx:00000000FF980000:8; INSTANCE:1]"
@@ -53,6 +55,7 @@ Global $hHBitmap; Handle Image for pixel functions
 
 Global $dirLogs = @ScriptDir & "\logs\"
 Global $dirCapture = @ScriptDir & "\capture\"
+Global $dirLoots = @ScriptDir & "\loots\"
 Global $ReqText
 Global $config = @ScriptDir & "\config.ini"
 
