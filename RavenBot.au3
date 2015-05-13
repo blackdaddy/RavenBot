@@ -1,5 +1,3 @@
-#RequireAdmin
-
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
 #pragma compile(ProductVersion, 1.6)
@@ -140,6 +138,8 @@ Func runBot()
 	  EndIf
 	  If _Sleep(2000) Then ExitLoop
    WEnd
+
+   SetLog("Start point found", $COLOR_BLUE)
 
    While $RunState
 
