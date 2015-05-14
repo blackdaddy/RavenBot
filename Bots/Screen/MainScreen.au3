@@ -280,6 +280,8 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
     _CaptureRegion()
 
+   If closeAllUIForLunchBox() Then Return True
+
    If ClickButtonImage(String(@ScriptDir & "\images\raven_icon.bmp")) Then
 	  SetLog("Raven Icon clicked.", $color)
 	  Return True

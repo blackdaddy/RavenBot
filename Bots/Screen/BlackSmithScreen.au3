@@ -12,6 +12,7 @@ Local $INVENTORY_TAB1_BUTTON_POS[2] = [448, 85]
 Local $INVENTORY_TAB2_BUTTON_POS[2] = [548, 85]
 Local $INVENTORY_TAB3_BUTTON_POS[2] = [648, 85]
 Local $ITEM_INFO_REGION[4] = [392, 102, 721, 300]
+Local $ITEM_INFO_CLOSE_BUTTON_REGION[4] = [693, 60, 729, 99]
 
 Func waitBlacksmithScreen()
    SetLog("Waiting for Blacksmith Screen", $COLOR_ORANGE)
@@ -100,7 +101,10 @@ Func sellItems(ByRef $newBadgeCount)
 			ContinueLoop
 		 EndIf
 
-		 _clickItem($itemSlotNumber)
+		 If clickItem($itemSlotNumber) = False Then
+			_log("Failed to click item : " & $itemSlotNumber)
+			ExitLoop
+		 EndIf
 
 		 _WaitItemDetailScreen($itemSlotNumber)
 
@@ -117,11 +121,11 @@ Func sellItems(ByRef $newBadgeCount)
 
 			If _sellThisItem() = False Then
 			   $itemSlotNumber = $itemSlotNumber + 1
-			   If _clickCloseButton() = False Then Return False
+			   If clickItemInfoCloseButton() = False Then Return False
 			EndIf
 		 Else
 			$itemSlotNumber = $itemSlotNumber + 1
-			If _clickCloseButton() = False Then Return False
+			If clickItemInfoCloseButton() = False Then Return False
 		 EndIf
 
 		 _Sleep(1200)
@@ -147,7 +151,7 @@ Func _WaitItemDetailScreen($itemSlotNumber)
 		 ; Success
 		 Return True
 	  Else
-		 _clickItem($itemSlotNumber)
+		 clickItem($itemSlotNumber)
 
 		 If checkDuplicatedConnection() = False Then
 			If ClickButtonImage(@ScriptDir & "\images\button_ok.bmp") Then
@@ -179,7 +183,7 @@ EndFunc
 
 Func _sellThisItem()
    _Sleep(700)
-    _CaptureRegion()
+   _CaptureRegion()
    If ClickButtonImage(@ScriptDir & "\images\button_sell.bmp") Then
 	  _Sleep(300)
 	  _CaptureRegion()
@@ -194,60 +198,87 @@ Func _sellThisItem()
    Return False
 EndFunc
 
-Func _checkNewBadge($itemSlotNumber)
-   Local $x, $y
+
+Func itemSlotBound($itemSlotNumber)
    Local $posX, $posY
    Local $itemW = 94
    Local $itemH = 107
 
    Switch $itemSlotNumber
 	  Case 1
-		 $posX = 400
-		 $posY = 122
+		 $posX = 402
+		 $posY = 116
 	  Case 2
-		 $posX = 510
-		 $posY = 122
+		 $posX = 506
+		 $posY = 116
 	  Case 3
 		 $posX = 610
-		 $posY = 122
+		 $posY = 116
 	  Case 4
-		 $posX = 400
-		 $posY = 295
+		 $posX = 402
+		 $posY = 289
 	  Case 5
-		 $posX = 510
-		 $posY = 295
+		 $posX = 506
+		 $posY = 289
 	  Case 6
 		 $posX = 610
-		 $posY = 295
+		 $posY = 289
    EndSwitch
 
-   If _ImageSearchArea(@ScriptDir & "\images\new_badge_small.bmp", 0, $posX, $posY, $posX + $itemW, $posY + $itemH, $x, $y, $DefaultTolerance + 10) Then
+   Local $bound[4]
+   $bound[0] = $posX
+   $bound[1] = $posY
+   $bound[2] = $posX + $itemW
+   $bound[3] = $posY + $itemH
+   return $bound
+EndFunc
+
+Func _checkNewBadge($itemSlotNumber)
+   Local $x, $y
+
+   Local $bound = itemSlotBound($itemSlotNumber)
+
+   If ImageSearchArea(@ScriptDir & "\images\new_badge_small.bmp", 0, $bound, $x, $y, $DefaultTolerance + 10) Then
 	  Return True
    EndIf
 
    Return False
 EndFunc
 
-Func _clickItem($itemSlotNumber)
-   _Sleep(500)
-   Switch $itemSlotNumber
-	  Case 1
-		 Click(453, 197)
-	  Case 2
-		 Click(553, 197)
-	  Case 3
-		 Click(653, 197)
-	  Case 4
-		 Click(453, 353)
-	  Case 5
-		 Click(553, 353)
-	  Case 6
-		 Click(653, 353)
-   EndSwitch
+Func clickItem($itemSlotNumber)
+
+   Local $x, $y
+
+   For $i = 0 To $RetryWaitCount
+
+	  _CaptureRegion()
+	  If ImageSearchArea(@ScriptDir & "\images\button_x.bmp", 0, $ITEM_INFO_CLOSE_BUTTON_REGION, $x, $y, $DefaultTolerance) Then
+		 Return True
+	  EndIf
+
+	  Switch $itemSlotNumber
+		 Case 1
+			Click(453, 197)
+		 Case 2
+			Click(553, 197)
+		 Case 3
+			Click(653, 197)
+		 Case 4
+			Click(453, 353)
+		 Case 5
+			Click(553, 353)
+		 Case 6
+			Click(653, 353)
+	  EndSwitch
+
+	  If _Sleep(1000) Then Return False
+   Next
+
+   Return True
 EndFunc
 
 
-Func _clickCloseButton()
+Func clickItemInfoCloseButton()
    _Sleep(700)
     _CaptureRegion()
    If ClickButtonImage(@ScriptDir & "\images\button_x.bmp") = False Then

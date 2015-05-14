@@ -13,6 +13,7 @@ Global $setting_use_buff_items[$MaxBattleTypeCount][4] = [[False, False, False, 
 Global $setting_eat_potion[$MaxBattleTypeCount] = [True, True, True, True, True]
 Global $setting_item_sell = True
 Global $setting_item_sell_maximum_level = 1
+Global $setting_item_lunch_maximum_level = 2
 Global $setting_loot_capture_level = 3
 Global $setting_pvp_enabled = False
 Global $setting_raid_enabled = True

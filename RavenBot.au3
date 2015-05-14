@@ -27,6 +27,7 @@ EndIf
 #include <Bots/Screen/GuildScreen.au3>
 #include <Bots/Screen/DailyScreen.au3>
 #include <Bots/Screen/AdventureStageScreen.au3>
+#include <Bots/Screen/MakeLunchBox.au3>
 #include <Bots/Util/SetLog.au3>
 #include <Bots/Util/Config.au3>
 #include <Bots/Util/Time.au3>
