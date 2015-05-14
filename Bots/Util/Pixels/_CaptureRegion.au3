@@ -1,4 +1,7 @@
 ;Saves a screenshot of the window into memory.
+Func _CaptureRegionArea($bound)
+   _CaptureRegion($bound[0], $bound[1], $bound[2], $bound[3])
+EndFunc
 
 Func _CaptureRegion($iLeft = 0, $iTop = 0, $iRight = $DEFAULT_WIDTH, $iBottom = $DEFAULT_HEIGHT, $ReturnBMP = False)
 	_GDIPlus_BitmapDispose($hBitmap)

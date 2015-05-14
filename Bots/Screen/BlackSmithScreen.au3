@@ -11,6 +11,7 @@
 Local $INVENTORY_TAB1_BUTTON_POS[2] = [448, 85]
 Local $INVENTORY_TAB2_BUTTON_POS[2] = [548, 85]
 Local $INVENTORY_TAB3_BUTTON_POS[2] = [648, 85]
+Local $ITEM_INFO_REGION[4] = [392, 102, 721, 300]
 
 Func waitBlacksmithScreen()
    SetLog("Waiting for Blacksmith Screen", $COLOR_ORANGE)
@@ -107,8 +108,8 @@ Func sellItems(ByRef $newBadgeCount)
 
 		 If $itemLevel >= $setting_loot_capture_level Then
 			_log("@@@@@@@ Loot Item @@@@@@@ : " & $itemLevel)
-			 _CaptureRegion()
-			SaveImageToFile("loot_" & $itemLevel, $dirLoots);
+			 _CaptureRegionArea($ITEM_INFO_REGION)
+			SaveImageToFile("loot_" & $itemLevel, $dirLoots, "jpg");
 		 EndIf
 
 		 If $itemLevel <= $setting_item_sell_maximum_level Then
@@ -192,7 +193,6 @@ Func _sellThisItem()
 
    Return False
 EndFunc
-
 
 Func _checkNewBadge($itemSlotNumber)
    Local $x, $y

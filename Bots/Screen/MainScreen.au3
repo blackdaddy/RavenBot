@@ -249,10 +249,29 @@ Func clickOkButton()
 EndFunc
 
 
+Func checkGamePatch()
+   Local $x, $y
+   _CaptureRegion()
+
+   If _ImageSearchArea(String(@ScriptDir & "\images\game_patch_text.bmp"), 0, 265, 178, 401, 237, $x, $y, $DefaultTolerance) Then
+	  SetLog("Game patch detected.", $COLOR_PINK)
+
+	  ClickButtonImageArea(String(@ScriptDir & "\images\button_ok.bmp"), $POPUP_BUTTON_REGION)
+	  Return True
+   EndIf
+
+   Return False
+EndFunc
+
+
 Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    Local $color = $COLOR_PINK
    Local $x, $y
+
+   If checkGamePatch() Then
+	  Return True
+   EndIf
 
    ; Checking duplicated connection
    If checkDuplicatedConnection($forceMode) = True Then
@@ -318,6 +337,7 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  Return True
    EndIf
 
+   ;-------------------------------------------------------------------------
    ; Ok button checking.. without [cancel] [ok]
    If ClickButtonImageArea(String(@ScriptDir & "\images\button_cancel_red.bmp"), $POPUP_BUTTON_REGION) Then
 	  SetLog("Cancel Button detected.", $color)
@@ -348,6 +368,7 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  SetLog("Center ok button detected.", $color)
 	  Return True
    EndIf
+   ;-------------------------------------------------------------------------
 
    If ClickButtonImageArea(String(@ScriptDir & "\images\button_package_close.bmp"), $NOTICE_POPUP_CLOSE_BUTTON_REGION) Then
 	  SetLog("Package Product detected.", $color)
