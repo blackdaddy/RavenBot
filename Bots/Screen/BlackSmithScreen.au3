@@ -669,13 +669,10 @@ EndFunc
 
 Func _isEmptyLevelUpItemSlot()
    Local $x, $y
-   _log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX EMPTY CHECK")
    _CaptureRegion()
    If ImageSearchArea(@ScriptDir & "\images\blacksmith\register_levelup_item.bmp", 0, $LEVELUP_SLOT_REGION, $x, $y, $DefaultTolerance) Then
 	  Return True
    EndIf
-   SaveToImageFile()
-   _log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX EMPTY FAIL")
    Return False
 EndFunc
 
