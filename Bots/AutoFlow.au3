@@ -7,17 +7,18 @@
 	Template AutoIt script.
 
 #ce ----------------------------------------------------------------------------
-;$testMode = True
 
+;$testMode = True
 
 Func AutoFlow()
    ; For test
+   ;MouseClickDrag("left", 556, 409, 556, 27, 50)
    ;waitBattleScreen()
    ;doBattle($Id_Adventure)
    ;doTempleBattle()
    ;doPvpBattle()
    ;Local $__newBadgeCount = 0
-   ;sellItems($__newBadgeCount)
+   ;cleanUpItems()
    ;selectAdventureStage()
    ;checkInventory()
    ;waitAdventureScreen()
@@ -78,13 +79,17 @@ Func AutoFlow()
 	  EndIf
    EndIf
 
-   If $setting_item_sell_maximum_level >= 1 Then
+   If $setting_item_sell_maximum_level >= 1 OR $setting_item_sell_loop_index >= 1 OR $setting_loot_capture_level >= 1 Then
 	  If checkInventory() = False Then
 		 Return False
 	  EndIf
    EndIf
 
+   If waitMainScreen() = False Then
+	  Return False
    EndIf
+
+   EndIf	; main if end
 
    checkStamina()
 
@@ -97,6 +102,9 @@ EndFunc	;==>AutoFlow
 
 
 Func checkInventory()
+
+   Local $newBadgeDetected = checkNewBadgeOnInventory()
+
    clickBlackSmithButton()
 
    If waitBlacksmithScreen() = False Then
@@ -104,16 +112,22 @@ Func checkInventory()
    EndIf
 
    Local $newBadgeCount = 0
-   If sellItems($newBadgeCount) = False Then
-	  If waitMainScreen() = False Then
+
+   If $newBadgeDetected Then
+	  If sellItems($newBadgeCount) = False Then
 		 Return False
 	  EndIf
+   EndIf
 
-	  Return False
+   If $setting_item_sell_loop_index >= 0 AND Mod($loopCount, currentItemCleanUpLoopCount()) == 0 Then
+	  If cleanUpItems() = False Then
+		 Return False
+	  EndIf
    EndIf
 
    clickBackButton()
 
+   ; Go to main screen and enter inventory to clear new badge mark
    If waitMainScreen() = False Then
 	  Return False
    EndIf
@@ -129,10 +143,6 @@ Func checkInventory()
 	  _Sleep(700)
 
 	  clickBackButton()
-
-	  If waitMainScreen() = False Then
-		 Return False
-	  EndIf
    EndIf
 
    Return True

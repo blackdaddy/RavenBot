@@ -165,6 +165,18 @@ Func checkActiveDailyStatus()
 EndFunc	;==>checkActiveDailyStatus
 
 
+Func checkNewBadgeOnInventory()
+
+   Local $bmpPath = @ScriptDir & "\images\new_badge.bmp"
+
+   If _ImageSearchArea($bmpPath, 0, 63, 389, 97, 421, $x, $y, $DefaultTolerance) Then
+	  SetLog("Inventory New badge detected", $COLOR_RED)
+	  Return True
+   EndIf
+   Return False
+EndFunc	;==>checkNewBadgeOnInventory
+
+
 Func clickAdventureButton()
    ClickPos($ADVENTURE_BUTTON_POS, 100, 2)	; twice click for some mistakes of mouse event
 EndFunc	;==>clickAdventureButton
@@ -282,11 +294,6 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    If closeAllUIForLunchBox() Then Return True
 
-   If ClickButtonImage(String(@ScriptDir & "\images\raven_icon.bmp")) Then
-	  SetLog("Raven Icon clicked.", $color)
-	  Return True
-   EndIf
-
    If $clickBackButton Then
 	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_back.bmp"), $BACK_BUTTON_REGION) Then
 		 SetLog("Back button clicked.", $color)
@@ -402,6 +409,18 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  SetLog("PvP loading detected.", $color)
 	  Return True
    EndIf
+
+   ; Bluestack screen
+   If ClickButtonImage(String(@ScriptDir & "\images\bluestacks\raven_icon.bmp")) Then
+	  SetLog("Raven Icon clicked.", $color)
+	  Return True
+   EndIf
+
+   If ClickButtonImage(String(@ScriptDir & "\images\bluestacks\button_install_app.bmp")) Then
+	  SetLog("App Install button clicked.", $color)
+	  Return True
+   EndIf
+
 
    Return False
 EndFunc	;==>closeAllPopupOnMainScreen

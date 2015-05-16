@@ -40,12 +40,6 @@ $x = $generalRightX
 $y = $contentPaneY + 5
 $w = 80
 Local $labelW = 137
-GUICtrlCreateLabel("Sell Item Max Level", $x, $y)
-$comboSellItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
-$y += 30
-GUICtrlCreateLabel("Screen Shot Item Level", $x, $y)
-$comboLootItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
-$y += 30
 GUICtrlCreateLabel("Reconnect Timeout", $x, $y)
 $comboReconnectTimeout = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
 $y += 25
@@ -241,6 +235,29 @@ GUICtrlCreateLabel("Remaining Health", $x, $y)
 $comboBattleHealthCondition[$Id_Daily] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
 
 
+;-----------------------------------------------------------
+; Tab : Inventory
+;-----------------------------------------------------------
+
+GUICtrlCreateTabItem("Inventory")
+
+$x = $contentPaneX
+$y = $contentPaneY
+$h = 20
+$w = 80
+
+GUICtrlCreateLabel("Screen Shot Item Level", $x, $y)
+$comboLootItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
+$y += 30
+GUICtrlCreateLabel("Sell Item Level", $x, $y)
+$comboSellItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
+$y += 30
+
+GUICtrlCreateLabel("Lunchbox Item Level", $x, $y)
+$comboLunchBoxItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
+$comboSellTermLoop = GUICtrlCreateCombo("", $x + 250, $y - 2, 110, $h)
+
+
 ;==================================
 ; Control Initial setting
 ;==================================
@@ -257,11 +274,21 @@ For $i = 0 To UBound($SETTING_RECONNECT_TIMEOUT) - 1
    GUICtrlSetData($comboReconnectTimeout, $SETTING_RECONNECT_TIMEOUT[$i] & " min")
 Next
 
+GUICtrlSetData($comboSellTermLoop, "None")
+For $i = 1 To UBound($SETTING_CLEANUP_LOOP_COUNT) - 1
+   GUICtrlSetData($comboSellTermLoop, "Every " & $SETTING_CLEANUP_LOOP_COUNT[$i] & " Loop")
+Next
+
 GUICtrlSetData($comboSellItemLevel, "None")
 GUICtrlSetData($comboLootItemLevel, "None")
+GUICtrlSetData($comboLunchBoxItemLevel, "None")
 For $i = 1 To 6
    GUICtrlSetData($comboSellItemLevel, "Level " & $i)
    GUICtrlSetData($comboLootItemLevel, "Level " & $i)
+Next
+
+For $i = 1 To 3
+   GUICtrlSetData($comboLunchBoxItemLevel, "Level " & $i)
 Next
 
 For $i = 10 To 60 Step 10

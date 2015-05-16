@@ -64,8 +64,9 @@ Global $BSpos[2] ; Inside BlueStacks positions relative to the screen
 Global Const $RetryWaitCount = 30
 Global Const $SleepWaitMSec = 1500
 
-Global Const $RetryWaitCountShort = 15
-Global Const $SleepWaitMSecShort = 1000
+Global Const $RetryWaitCountShort = 18
+Global Const $SleepWaitMSecShort = 800
+Global Const $SleepWaitMSecVeryFast = 200
 
 Global Const $MaxStageNumber = 18
 Global Const $IdleMsec = 1000
@@ -80,6 +81,7 @@ Global Const $Id_Guild = 3
 Global Const $Id_Daily = 4
 
 Global Const $SETTING_RECONNECT_TIMEOUT[8] = [1, 5, 10, 15, 30, 45, 60, 120]
+Global Const $SETTING_CLEANUP_LOOP_COUNT[5] = [0, 1, 3, 5, 10]
 
 ; ---------- STATS ----------
 Global $loopCount = 1

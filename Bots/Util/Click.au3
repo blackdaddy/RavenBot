@@ -30,7 +30,7 @@ EndFunc	;==>ClickButtonImage
 Func ClickButtonImageArea($btnPath, $bound, $check = True)
    Local $ok = False
    Local $x, $y
-   While 1
+   For $i = 0 To $RetryWaitCountShort
 	  If ImageSearchArea($btnPath, 0, $bound, $x, $y, 80) Then
 		 ; Click This Button
 		 Click($x, $y);
@@ -41,12 +41,12 @@ Func ClickButtonImageArea($btnPath, $bound, $check = True)
 		 ; Verify check correctly
 		 $ok = True
 		 If _Sleep(1200) Then Return False
-		  _CaptureRegion()
+		 _CaptureRegion()
 		 ContinueLoop
 	  Else
 		 ExitLoop
 	  EndIf
-   WEnd
+   Next
 
    Return $ok
 EndFunc	;==>ClickButtonImage

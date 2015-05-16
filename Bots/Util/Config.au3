@@ -11,7 +11,7 @@ Global $setting_stage_major = 7
 Global $setting_stage_minor = 2
 Global $setting_use_buff_items[$MaxBattleTypeCount][4] = [[False, False, False, False], [True, True, True, True], [False, False, False, True], [False, False, False, True], [True, False, False, True]]
 Global $setting_eat_potion[$MaxBattleTypeCount] = [True, True, True, True, True]
-Global $setting_item_sell = True
+Global $setting_item_sell_loop_index = 0
 Global $setting_item_sell_maximum_level = 1
 Global $setting_item_lunch_maximum_level = 2
 Global $setting_loot_capture_level = 3
@@ -23,6 +23,7 @@ Global $setting_daily_adventure_enabled = True
 Global $setting_daily_level = 1	; 0~2
 Global $setting_remaining_health_index[$MaxBattleTypeCount] = [4, 4, 4, 4, 4]
 Global $setting_reconnect_timeout_index = 0
+Global $setting_cleanup_drag_count = 1
 ; ------------------------------
 
 Local $setting_common_group = "Raven"
@@ -38,6 +39,10 @@ EndFunc
 
 Func healthConditionPercent($battleId)
    Return ($setting_remaining_health_index[$battleId] + 1) * 10
+EndFunc
+
+Func currentItemCleanUpLoopCount()
+   Return $SETTING_CLEANUP_LOOP_COUNT[$setting_item_sell_loop_index]
 EndFunc
 
 
@@ -65,7 +70,9 @@ Func loadConfig()
 		 $setting_remaining_health_index[$i] = Int(IniRead($config, $setting_common_group, "health_condition_index_" & $i, "4"))
 	  Next
 
+	  $setting_item_sell_loop_index = Int(IniRead($config, $setting_common_group, "sell_item_loop_index", "1"))
 	  $setting_item_sell_maximum_level = Int(IniRead($config, $setting_common_group, "sell_item_level", "1"))
+	  $setting_item_lunch_maximum_level = Int(IniRead($config, $setting_common_group, "lunchbox_item_level", "2"))
 	  $setting_loot_capture_level = Int(IniRead($config, $setting_common_group, "loot_item_level", "3"))
 	  $setting_reconnect_timeout_index = Int(IniRead($config, $setting_common_group, "reconnect_timeout_index", "2"))
 
@@ -144,6 +151,8 @@ Func applyConfig()
    _GUICtrlComboBox_SetCurSel($comboStageMinor, Int($setting_stage_minor) - 1)
 
    _GUICtrlComboBox_SetCurSel($comboLootItemLevel, Int($setting_loot_capture_level))
+   _GUICtrlComboBox_SetCurSel($comboSellTermLoop, Int($setting_item_sell_loop_index))
+   _GUICtrlComboBox_SetCurSel($comboLunchBoxItemLevel, Int($setting_item_lunch_maximum_level))
    _GUICtrlComboBox_SetCurSel($comboSellItemLevel, Int($setting_item_sell_maximum_level))
    _GUICtrlComboBox_SetCurSel($comboReconnectTimeout, Int($setting_reconnect_timeout_index))
    _GUICtrlComboBox_SetCurSel($comboDailyLevel, Int($setting_daily_level))
@@ -184,6 +193,9 @@ Func saveConfig()
    IniWrite($config, $setting_common_group, "stage_major", _GUICtrlComboBox_GetCurSel($comboStageMajor) + 1)
    IniWrite($config, $setting_common_group, "stage_minor", _GUICtrlComboBox_GetCurSel($comboStageMinor) + 1)
    IniWrite($config, $setting_common_group, "sell_item_level", _GUICtrlComboBox_GetCurSel($comboSellItemLevel))
+   IniWrite($config, $setting_common_group, "sell_item_loop_index", _GUICtrlComboBox_GetCurSel($comboSellTermLoop))
+   IniWrite($config, $setting_common_group, "lunchbox_item_level", _GUICtrlComboBox_GetCurSel($comboLunchBoxItemLevel))
+
    IniWrite($config, $setting_common_group, "loot_item_level", _GUICtrlComboBox_GetCurSel($comboLootItemLevel))
    IniWrite($config, $setting_common_group, "daily_level", _GUICtrlComboBox_GetCurSel($comboDailyLevel))
    IniWrite($config, $setting_common_group, "reconnect_timeout_index", _GUICtrlComboBox_GetCurSel($comboReconnectTimeout))
