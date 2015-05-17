@@ -259,6 +259,7 @@ $comboLunchBoxItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
 $comboSellTermLoop = GUICtrlCreateCombo("", $x + 250, $y - 2, 110, $h)
 $y += 30
 
+GUICtrlCreateLabel("Important Item Options (BETA, not completed)", $x, $y)
 $y += 16
 $w = 120
 For $i = 1 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT
