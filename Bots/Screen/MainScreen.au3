@@ -276,6 +276,60 @@ Func checkGamePatch()
 EndFunc
 
 
+Func checkRavenScreen()
+   Local $x, $y
+
+   Local $suspecting = False;
+
+   For $i = 0 To $RetryWaitCount
+	  If _ImageSearchArea(String(@ScriptDir & "\images\bluestacks\invalid_game_status.bmp"), 0, 0, 0, 170, 25, $x, $y, 0) Then
+		 $suspecting = True
+		 If $i = 0 Then
+			SetLog("Suspected invalid game status..", $COLOR_PINK)
+			SetLog("Waiting for valid game screen ..", $COLOR_ORANGE)
+		 EndIf
+
+		 If _Sleep($SleepWaitMSec) Then Return False
+
+		 _CaptureRegion()
+		 If _ImageSearchArea(String(@ScriptDir & "\images\bluestacks\invalid_game_status_exception.bmp"), 0, 13, 33, 81, 103, $x, $y, 10) Then
+			SetLog("Valid game screen located.", $COLOR_BLUE)
+			Return True
+		 EndIf
+
+		 ; Waiting.....
+	  Else
+		 If $suspecting Then
+			SetLog("Valid game screen may be located.", $COLOR_BLUE)
+		 EndIf
+		 Return True
+	  EndIf
+
+	  _CaptureRegion()
+   Next
+
+   SetLog("Invalid screen detected.", $COLOR_RED)
+   _CaptureRegion()
+
+   For $i = 0 To $RetryWaitCount
+  	  Click(778, 26)	; click back button
+	  If ClickButtonImage(String(@ScriptDir & "\images\bluestacks\raven_icon.bmp")) Then
+		 SetLog("Raven Icon clicked.", $COLOR_PINK)
+		 ExitLoop
+	  EndIf
+
+	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_game_close.bmp"), $NORMAL_CLOSE_BUTTON_REGION) Then
+		 SetLog("Game close button detected.", $COLOR_PINK)
+		 ExitLoop
+	  EndIf
+
+	  If _Sleep($SleepWaitMSecShort) Then Return False
+   Next
+
+   Return False
+EndFunc
+
+
 Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    Local $color = $COLOR_PINK
@@ -421,6 +475,9 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  Return True
    EndIf
 
+   If checkRavenScreen() = False Then
+	  Return True
+   EndIf
 
    Return False
 EndFunc	;==>closeAllPopupOnMainScreen

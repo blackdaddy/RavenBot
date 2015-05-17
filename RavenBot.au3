@@ -1,11 +1,11 @@
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
-#pragma compile(ProductVersion, 1.8)
-#pragma compile(FileVersion, 1.8)
+#pragma compile(ProductVersion, 1.9)
+#pragma compile(FileVersion, 1.9)
 #pragma compile(LegalCopyright, ?The Bytecode Club)
 
 $sBotName = "Raven Bot"
-$sBotVersion = "1.8"
+$sBotVersion = "1.9"
 $sBotTitle = "AutoIt " & $sBotName & " v" & $sBotVersion
 
 If _Singleton($sBotTitle, 1) = 0 Then
