@@ -6,8 +6,7 @@
 2. 블루스택에 알아서 Raven 게임 설치
 3. Raven bot 설치 : https://github.com/darkdaddy/RavenBot/tree/master/release
 4. Start 버튼을 누름
-5. 블루스택 화면 사이즈가 안 맞는다는 팝업이 뜸. 이때 확인을 누르고 PC 재부팅. (필수)
-6. 블루스택 시작 후 레이븐 게임 직접 실행
+5. 블루스택 화면 사이즈가 안 맞으면 자동으로 맞추고 재시작 해줌.
 6. Raven Bot 실행 후, Start 누르면 시작됨.
 
 ## 문제 발생시
