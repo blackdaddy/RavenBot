@@ -424,11 +424,3 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    Return False
 EndFunc	;==>closeAllPopupOnMainScreen
-
-
-Func runBlueStack()
-   Local $sWow64 = ""
-   If @AutoItX64 Then $sWow64 = "\Wow6432Node"
-   Local $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\BlueStacks", "InstallDir") & "\HD-StartLauncher.exe"
-   ShellExecute($sFile)
-EndFunc

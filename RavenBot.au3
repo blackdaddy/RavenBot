@@ -1,11 +1,11 @@
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
-#pragma compile(ProductVersion, 1.7)
-#pragma compile(FileVersion, 1.7)
+#pragma compile(ProductVersion, 1.8)
+#pragma compile(FileVersion, 1.8)
 #pragma compile(LegalCopyright, ?The Bytecode Club)
 
 $sBotName = "Raven Bot"
-$sBotVersion = "1.7"
+$sBotVersion = "1.8"
 $sBotTitle = "AutoIt " & $sBotName & " v" & $sBotVersion
 
 If _Singleton($sBotTitle, 1) = 0 Then
@@ -14,8 +14,11 @@ If _Singleton($sBotTitle, 1) = 0 Then
 EndIf
 
 #include <Bots/GlobalVariables.au3>
-#include <Bots/AutoFlow.au3>
 #include <Bots/Form/MainView.au3>
+#include <Bots/Config.au3>
+#include <Bots/GameManager.au3>
+#include <Bots/AutoFlow.au3>
+#include <Bots/Stats.au3>
 #include <Bots/Screen/MainScreen.au3>
 #include <Bots/Screen/AdventureScreen.au3>
 #include <Bots/Screen/CommonBattleScreen.au3>
@@ -28,7 +31,6 @@ EndIf
 #include <Bots/Screen/DailyScreen.au3>
 #include <Bots/Screen/AdventureStageScreen.au3>
 #include <Bots/Util/SetLog.au3>
-#include <Bots/Util/Config.au3>
 #include <Bots/Util/Time.au3>
 #include <Bots/Util/CreateLogFile.au3>
 #include <Bots/Util/_Sleep.au3>
@@ -161,7 +163,8 @@ Func runBot()
 		 EndIf
 
 		 If Initiate() = False Then
-			SetLog("Failed to initialize " & $Title, $COLOR_RED)
+			SetLog("Restarting BlueStack..", $COLOR_RED)
+			killBlueStack()
 			If _Sleep(2000) Then Return ExitLoop
 			ContinueLoop	; restart loop
 		 EndIf

@@ -112,6 +112,7 @@ Global $checkBuffHealth[$MaxBattleTypeCount];
 Global $checkBuffAutoSkill[$MaxBattleTypeCount];
 Global $checkBattleEatPotion[$MaxBattleTypeCount];
 Global $comboBattleHealthCondition[$MaxBattleTypeCount];
+Global $checkItemOptions[$SETTING_IMPORTANT_ITEM_OPTION_COUNT];
 
 $checkBuffAttack[$Id_Adventure] = GUICtrlCreateCheckbox("Buff Attack", $x, $y, $w, 25)
 $y += $h
@@ -256,6 +257,14 @@ $y += 30
 GUICtrlCreateLabel("Lunchbox Item Level", $x, $y)
 $comboLunchBoxItemLevel = GUICtrlCreateCombo("", $x + $labelW, $y - 2, $w, $h)
 $comboSellTermLoop = GUICtrlCreateCombo("", $x + 250, $y - 2, 110, $h)
+$y += 30
+
+$y += 16
+$w = 120
+For $i = 1 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT
+   $checkItemOptions[$i - 1] = GUICtrlCreateCheckbox($SETTING_IMPORTANT_ITEM_OPTION_NAME[$i - 1], $x, $y, $w, 25)
+   $y += 30
+Next
 
 
 ;==================================
@@ -384,97 +393,3 @@ Func mainViewClose()
    Exit
 EndFunc
 
-
-;==================================
-; Methods
-;==================================
-
-Func isValidRunningEmulator()
-   If IsArray(ControlGetPos($Title, "_ctl.Window", $WindowClass)) Then
-	  Return True
-   EndIf
-
-   Return False
-EndFunc
-
-
-Func Initiate()
-   If isValidRunningEmulator() Then
-	  Local $BSsize = [ControlGetPos($Title, "_ctl.Window", $WindowClass)[2], ControlGetPos($Title, "_ctl.Window", $WindowClass)[3]]
-	  Local $fullScreenRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "FullScreen")
-	  Local $guestHeightRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "GuestHeight")
-	  Local $guestWidthRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "GuestWidth")
-	  Local $windowHeightRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "WindowHeight")
-	  Local $windowWidthRegistryData = RegRead($REGISTRY_KEY_DIRECTORY, "WindowWidth")
-
-	  Local $BSx = ($BSsize[0] > $BSsize[1]) ? $BSsize[0] : $BSsize[1]
-	  Local $BSy = ($BSsize[0] > $BSsize[1]) ? $BSsize[1] : $BSsize[0]
-
-	  If $BSx <> $DEFAULT_WIDTH Or $BSy <> $DEFAULT_HEIGHT Then
-		 RegWrite($REGISTRY_KEY_DIRECTORY, "FullScreen", "REG_DWORD", "0")
-		 RegWrite($REGISTRY_KEY_DIRECTORY, "GuestHeight", "REG_DWORD", $DEFAULT_HEIGHT)
-		 RegWrite($REGISTRY_KEY_DIRECTORY, "GuestWidth", "REG_DWORD", $DEFAULT_WIDTH)
-		 RegWrite($REGISTRY_KEY_DIRECTORY, "WindowHeight", "REG_DWORD", $DEFAULT_HEIGHT)
-		 RegWrite($REGISTRY_KEY_DIRECTORY, "WindowWidth", "REG_DWORD", $DEFAULT_WIDTH)
-		 SetLog("Please restart your computer for the applied changes to take effect.", $COLOR_ORANGE)
-		 _Sleep(3000)
-
-		 $MsgRet = MsgBox(BitOR($MB_OKCANCEL, $MB_SYSTEMMODAL), "Restart Computer", "Restart your computer for the applied changes to take effect." & @CRLF & "If your BlueStacks is the correct size  (" & $DEFAULT_WIDTH & " x " & $DEFAULT_HEIGHT & "), click OK.", 10)
-		 If $MsgRet <> $IDOK Then
-			btnStop()
-			Return False
-		 EndIf
-		 Exit
-	  EndIf
-
-	  Return True
-   Else
-	  SetLog("Could not find " & $Title, $COLOR_RED)
-	  Return False
-   EndIf
-EndFunc
-
-
-Func clearStats()
-   $loopCount = 0
-   $errorCount = 0
-   $lastElapsed = "--:--:--"
-   $totalElapsed = "--:--:--"
-   $raidAttackCount = 0
-   $pvpAttackCount = 0
-   $guildAttackCount = 0
-   $dailyAttackCount = 0
-   $itemSoldCount = 0
-   $totalErrorCount = 0
-EndFunc
-
-
-Func updateTotalElapsed()
-
-   If $RunState Then
-	  Local $iSec, $iMin, $iHour
-	  Local $time = _TicksToTime(Int(TimerDiff($hTotalTimer)), $iHour, $iMin, $iSec)
-	  $totalElapsed = StringFormat("%02i:%02i:%02i", $iHour, $iMin, $iSec)
-   Else
-	  $totalElapsed = "--:--:--"
-   EndIf
-
-   Local $text = "Total Elapsed : " & $totalElapsed
-   GUICtrlSetData($txtTotalElapsed, $text)
-EndFunc
-
-Func updateStats()
-
-   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Error : " & $errorCount & "(" & $totalErrorCount & ")"
-
-   GUICtrlSetData($txtStats, $text)
-EndFunc
-
-
-Func updateRemainingReconnectStatus($msec)
-   Local $iSec, $iMin, $iHour
-   Local $time = _TicksToTime($msec, $iHour, $iMin, $iSec)
-   Local $s = StringFormat("%02i:%02i:%02i", $iHour, $iMin, $iSec)
-   Local $text = "Reconnect : " & $s
-   GUICtrlSetData($labelRemainingReconnectTime, $text)
-EndFunc

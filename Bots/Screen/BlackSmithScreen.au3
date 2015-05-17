@@ -13,6 +13,7 @@ Local $INVENTORY_TAB1_BUTTON_POS[2] = [448, 85]
 Local $INVENTORY_TAB2_BUTTON_POS[2] = [548, 85]
 Local $INVENTORY_TAB3_BUTTON_POS[2] = [648, 85]
 Local $ITEM_INFO_REGION[4] = [392, 102, 721, 300]
+Local $ITEM_OPTION_REGION[4] = [498, 176, 718, 339]
 Local $ITEM_INFO_CLOSE_BUTTON_REGION[4] = [693, 60, 729, 99]
 Local $ITEM_INFO_LEVEL_CIRCLE_REGION[4] = [400, 112, 429, 142]
 Local $LEVELUP_BUTTON_REGION[4] = [292, 393, 341, 428]
@@ -515,6 +516,12 @@ Func _findOneLevelUpItem(ByRef $preferredIndex, ByRef $stopFlag)
 			If $preferredIndex < 0 Then $preferredIndex = $itemSlotNumber - 1
 		 EndIf
 
+		 If _checkThisItemOptions() = False Then
+			SetLog("Checking item " & $itemSlotNumber & ": important", $COLOR_BLUE)
+			$itemSlotNumber = $itemSlotNumber + 1
+			ContinueLoop
+		 EndIf
+
 		 If $itemLevel <= $setting_item_sell_maximum_level OR $itemLevel < $setting_item_lunch_maximum_level Then
 			_log("$$$$$$$ Item sold $$$$$$$ : " & $itemLevel & ":" & $setting_item_sell_maximum_level & ":" & $setting_item_lunch_maximum_level)
 
@@ -524,7 +531,7 @@ Func _findOneLevelUpItem(ByRef $preferredIndex, ByRef $stopFlag)
 			   Return 0	; failed.. unexpected screen status
 			EndIf
 
-			SetLog("Checking item " & $itemSlotNumber & ":  sold", $COLOR_DARKGREY)
+			SetLog("Checking item " & $itemSlotNumber & ": sold", $COLOR_DARKGREY)
 
 			ContinueLoop
 		 Else
@@ -707,4 +714,19 @@ Func sortItemGradeUp()
 
    SetLog("Sorting item grade Timeout", $COLOR_RED)
    Return False
+EndFunc
+
+
+Func _checkThisItemOptions()
+   Local $x, $y
+   _CaptureRegion()
+   For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1
+	  Local $fileName = @ScriptDir & "\images\blacksmith\options\" & $SETTING_IMPORTANT_ITEM_OPTION_NAME[$i] & ".bmp"
+
+	  If ImageSearchArea($fileName, 0, $ITEM_OPTION_REGION, $x, $y, $DefaultTolerance) Then
+		 Return False
+	  EndIf
+   Next
+
+   Return True
 EndFunc

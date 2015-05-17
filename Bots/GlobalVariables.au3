@@ -29,6 +29,7 @@ Global Const $REGISTRY_KEY_DIRECTORY = "HKEY_LOCAL_MACHINE\SOFTWARE\BlueStacks\G
 
 Global $TitleForLog = "BlueStacks" ; For display name for logging
 Global $ProcessName = "HD-Frontend.exe"
+Global $ProcessNameForKill = "HD-Service.exe"
 Global $WindowClass = "[CLASS:BlueStacksApp; INSTANCE:1]"
 Global $Title = "BlueStacks App Player" ; Name of the Window
 ;Global $WindowClass = "[CLASS:Afx:00000000FF980000:8; INSTANCE:1]"
@@ -80,21 +81,14 @@ Global Const $Id_Raid = 2
 Global Const $Id_Guild = 3
 Global Const $Id_Daily = 4
 
+
+; ---------- SETTINGS ------------
+
 Global Const $SETTING_RECONNECT_TIMEOUT[8] = [1, 5, 10, 15, 30, 45, 60, 120]
 Global Const $SETTING_CLEANUP_LOOP_COUNT[5] = [0, 1, 3, 5, 10]
+Global Const $SETTING_IMPORTANT_ITEM_OPTION_COUNT = 3
+Global Const $SETTING_IMPORTANT_ITEM_OPTION_NAME[$SETTING_IMPORTANT_ITEM_OPTION_COUNT] = ["Avoidability", "CriticalDamage", "CriticalRate"]
 
-; ---------- STATS ----------
-Global $loopCount = 1
-Global $lastElapsed = ""
-Global $totalElapsed = ""
-Global $raidAttackCount = 0
-Global $pvpAttackCount = 0
-Global $guildAttackCount = 0
-Global $dailyAttackCount = 0
-Global $itemSoldCount = 0
-Global $errorCount = 0
-Global $totalErrorCount = 0
-Global $hTotalTimer
 
 ; ---------- REGIONS ------------
 Global Const $LEFT_TOP_SCREEN_NAME_REGION[4] = [70, 9, 135, 38]

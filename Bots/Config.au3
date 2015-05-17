@@ -1,5 +1,4 @@
 
-
 ; -----------------------------
 ; Settings Variable
 ; -----------------------------
@@ -24,6 +23,7 @@ Global $setting_daily_level = 1	; 0~2
 Global $setting_remaining_health_index[$MaxBattleTypeCount] = [4, 4, 4, 4, 4]
 Global $setting_reconnect_timeout_index = 0
 Global $setting_cleanup_drag_count = 1
+Global $setting_important_item_options[$SETTING_IMPORTANT_ITEM_OPTION_COUNT] = [False, False, False]
 ; ------------------------------
 
 Local $setting_common_group = "Raven"
@@ -37,9 +37,11 @@ Func currentReconnectTimeout()
    Return $SETTING_RECONNECT_TIMEOUT[$index] * 60 * 1000
 EndFunc
 
+
 Func healthConditionPercent($battleId)
    Return ($setting_remaining_health_index[$battleId] + 1) * 10
 EndFunc
+
 
 Func currentItemCleanUpLoopCount()
    Return $SETTING_CLEANUP_LOOP_COUNT[$setting_item_sell_loop_index]
@@ -70,6 +72,10 @@ Func loadConfig()
 		 $setting_remaining_health_index[$i] = Int(IniRead($config, $setting_common_group, "health_condition_index_" & $i, "4"))
 	  Next
 
+	  For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1
+		 $setting_important_item_options[$i] = IniRead($config, $setting_common_group, "important_item_option_" & $i, "False") == "True" ? True : False
+	  Next
+
 	  $setting_item_sell_loop_index = Int(IniRead($config, $setting_common_group, "sell_item_loop_index", "1"))
 	  $setting_item_sell_maximum_level = Int(IniRead($config, $setting_common_group, "sell_item_level", "1"))
 	  $setting_item_lunch_maximum_level = Int(IniRead($config, $setting_common_group, "lunchbox_item_level", "2"))
@@ -81,6 +87,14 @@ Func loadConfig()
 EndFunc	;==>loadConfig
 
 Func applyConfig()
+
+   For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1
+	  If $setting_important_item_options[$i] = 1 Then
+		 GUICtrlSetState($checkItemOptions[$i], $GUI_CHECKED)
+	  Else
+		 GUICtrlSetState($checkItemOptions[$i], $GUI_UNCHECKED)
+	  EndIf
+   Next
 
    For $i = 0 To $MaxBattleTypeCount - 1
 	  If $setting_use_buff_items[$i][0] = 1 Then
@@ -190,6 +204,11 @@ Func saveConfig()
 	  IniWrite($config, $setting_common_group, "eat_potion_" & $i, _IsChecked($checkBattleEatPotion[$i]))
 	  IniWrite($config, $setting_common_group, "health_condition_index_" & $i, _GUICtrlComboBox_GetCurSel($comboBattleHealthCondition[$i]))
    Next
+
+   For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1
+	  IniWrite($config, $setting_common_group, "important_item_option_" & $i, _IsChecked($checkItemOptions[$i]))
+   Next
+
    IniWrite($config, $setting_common_group, "stage_major", _GUICtrlComboBox_GetCurSel($comboStageMajor) + 1)
    IniWrite($config, $setting_common_group, "stage_minor", _GUICtrlComboBox_GetCurSel($comboStageMinor) + 1)
    IniWrite($config, $setting_common_group, "sell_item_level", _GUICtrlComboBox_GetCurSel($comboSellItemLevel))

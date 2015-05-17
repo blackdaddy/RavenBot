@@ -18,6 +18,7 @@ Func AutoFlow()
    ;doTempleBattle()
    ;doPvpBattle()
    ;Local $__newBadgeCount = 0
+   ;sellItems($__newBadgeCount)
    ;cleanUpItems()
    ;selectAdventureStage()
    ;checkInventory()
