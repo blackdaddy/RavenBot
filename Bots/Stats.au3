@@ -9,6 +9,7 @@ Global $dailyAttackCount = 0
 Global $itemSoldCount = 0
 Global $errorCount = 0
 Global $totalErrorCount = 0
+Global $adventureFailedCount = 0
 Global $hTotalTimer
 
 Func clearStats()
@@ -22,6 +23,7 @@ Func clearStats()
    $dailyAttackCount = 0
    $itemSoldCount = 0
    $totalErrorCount = 0
+   $adventureFailedCount = 0
 EndFunc
 
 
@@ -41,7 +43,7 @@ EndFunc
 
 Func updateStats()
 
-   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Error : " & $errorCount & "(" & $totalErrorCount & ")"
+   Local $text = "Loop : " & $loopCount & @CRLF & "Elapsed : " & $lastElapsed & @CRLF & "PvP : " & $pvpAttackCount & @CRLF & "Raid : " & $raidAttackCount & @CRLF   & "Guild : " & $guildAttackCount & @CRLF & "Daily : " & $dailyAttackCount & @CRLF & "Item sold : " & $itemSoldCount & @CRLF & "Adventure Failure : " & $adventureFailedCount & @CRLF & "Error : " & $errorCount & "(" & $totalErrorCount & ")"
 
    GUICtrlSetData($txtStats, $text)
 EndFunc

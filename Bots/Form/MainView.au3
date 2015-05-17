@@ -68,7 +68,7 @@ $txtTotalElapsed = GUICtrlCreateLabel("", $x, $y, 200, 20);, BitOR($GUI_SS_DEFAU
 GUICtrlSetColor(-1, $COLOR_GREEN)
 GUICtrlSetFont(-1, 10, 800, 0, $sFont) ; Set the font of the previous control.
 $y += 18
-$txtStats = GUICtrlCreateLabel("", $x, $y, 200, 150);, BitOR($GUI_SS_DEFAULT_LABEL,$SS_GRAYFRAME))
+$txtStats = GUICtrlCreateLabel("", $x, $y, 200, 200);, BitOR($GUI_SS_DEFAULT_LABEL,$SS_GRAYFRAME))
 GUICtrlSetColor(-1, $COLOR_PURPLE)
 GUICtrlSetFont(-1, 10, 800, 0, $sFont) ; Set the font of the previous control.
 

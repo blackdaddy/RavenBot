@@ -93,6 +93,16 @@ Func doBattle($battleId)
 		 ExitLoop
 	  EndIf
 
+	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_cancel_red.bmp"), $POPUP_BUTTON_REGION) Then
+
+		 ; Update statistics
+		 $adventureFailedCount = $adventureFailedCount + 1
+		 updateStats()
+
+		 SetLog("Battle Failure detected.", $COLOR_RED)
+		 ExitLoop
+	  EndIf
+
 	  If clickOkButton() <> 0 Then
 		 ExitLoop
 	  EndIf

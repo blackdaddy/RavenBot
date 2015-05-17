@@ -112,7 +112,7 @@ Func _doDragItemList($count)
 	  WinMove($Title, "", 0, 0)
 	  _Sleep(50)
 	  MouseClickDrag("left", 556, 409, 556, 24, 50)
-	  _Sleep(100)
+	  _Sleep(500)
    Next
 EndFunc
 
