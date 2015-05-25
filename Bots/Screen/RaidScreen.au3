@@ -42,6 +42,7 @@ EndFunc	;==>waitRaidScreen
 Func startRaidBattle()
    SetLog("Waiting for Raid Battle Ready Screen", $COLOR_ORANGE)
    Local $foundRaidAttackButton = False
+   Local $currentSlotIndex = 0
    For $i = 0 To $RetryWaitCount
 
 	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_raid_start.bmp"), $RAID_REAL_START_BUTTON_REGION) = False Then
@@ -62,4 +63,91 @@ Func startRaidBattle()
    Next
    Return False
 EndFunc	;==>startRaidBattle
+
+
+; Working....
+Func checkRaidTrainData()
+   Local Const $PaddingLeft = 45
+   Local Const $LevelTextY = 250
+   Local Const $RaidCardWidth = 247
+   Local Const $OffsetX = 38
+   Local Const $Gap = 19
+
+   For $i = 0 To 2
+	  Local $startX = $PaddingLeft + ($i * ($RaidCardWidth + $Gap) + $OffsetX
+	  Local $dataRegion[4] = [$startX, $LevelTextY, $startX + 55, $LevelTextY + 22]
+	  _CaptureRegionArea($dataRegion)
+	  SaveImageToFile("train_" & $setting_traindata_index, $dirTrain, "bmp", False);
+   Next
+EndFunc
+
+
+; Working....
+Func readRaidLevel($currentSlotIndex)
+   Local Const $PaddingLeft = 45
+   Local Const $LevelTextY = 250
+   Local Const $RaidCardWidth = 247
+   Local Const $OffsetX = 38
+   Local Const $Gap = 19
+   Local Const $FontColor = Hex(0xD28D13, 6)
+   Local Const $FontHeight = 22
+   Local Const $MaxFontOffset = 4
+
+   Local Const $DigitCount = 2
+   Local Const $FontWidth[10] = [12, 13, 12, 13, 13, 13, 13, 13, 13, 13]	; 0, 2, 3
+
+   Local $startX = $PaddingLeft + ($currentSlotIndex * ($RaidCardWidth + $Gap) + $OffsetX
+
+   Local $res = 0
+
+   Local $found = False
+   Local $fontOffset = 0
+   For $fontOffset = 0 To $MaxFontOffset
+	  For $y = 0 To $FontHeight - 1
+		 If _ColorCheck(_GetPixelColor($startX + $fontOffset + 1, $LevelTextY + $y), $FontColor, $DefaultTolerance) Then
+			$found = True
+			ExitLoop
+		 EndIf
+	  Next
+	  If $found Then ExitLoop
+   Next
+
+   If $found = False Then Return -1
+
+   $startX = $startX + $fontOffset
+
+   For $i = $DigitCount - 1 To 0 Step -1
+
+	  Local $digit = -1
+
+	  ; Digit 0
+	  If $digit < 0 Then
+		 If _ColorCheck(_GetPixelColor($startX + 3, $LevelTextY + 8), $FontColor, $DefaultTolerance) Then
+			If _ColorCheck(_GetPixelColor($startX + 3, $LevelTextY + 11), $FontColor, $DefaultTolerance) Then
+			   If _ColorCheck(_GetPixelColor($startX + 3, $LevelTextY + 13), $FontColor, $DefaultTolerance) Then
+				  $digit = 0
+			   EndIf
+			EndIf
+		 EndIf
+	  EndIf
+
+	  ; Digit 3
+	  If $digit < 0 Then
+		 If _ColorCheck(_GetPixelColor($startX + 3, $LevelTextY + 7), $FontColor, $DefaultTolerance) Then
+			If _ColorCheck(_GetPixelColor($startX + 3, $LevelTextY + 17), $FontColor, $DefaultTolerance) Then
+			   If _ColorCheck(_GetPixelColor($startX + 3, $LevelTextY + 11), $FontColor, $DefaultTolerance) = False Then
+				  $digit = 3
+			   EndIf
+			EndIf
+		 EndIf
+	  EndIf
+
+	  If $digit < 0 Then Return -1
+
+	  $res = $res + $digit * (10 ^ $i)
+	  $startX += $FontWidth[$digit]
+   Next
+
+   Return $res
+EndFunc
 

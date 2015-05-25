@@ -23,7 +23,14 @@ Func selectBuffItem($battleId)
 
    SetLog("Selecting buff items...", $COLOR_ORANGE)
 
-   If _Sleep(2000) Then Return True	; to avoid loading status
+   Local $waitTime = 10000
+
+   Switch $battleId
+	  Case $Id_Adventure
+		 $waitTime  = 2000
+   EndSwitch
+
+   If _Sleep($waitTime) Then Return True	; to avoid loading status
 
    _CaptureRegion()
 
@@ -94,6 +101,7 @@ Func waitBattleReadyScreen($checkOne = False)
 		 _clickReadyButton()	; refer to AdventureScreen.au3
 	  EndIf
 
+	  _Sleep($SleepWaitMSec)
 Next
 
    Return False

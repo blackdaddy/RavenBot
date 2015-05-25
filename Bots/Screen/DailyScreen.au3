@@ -147,7 +147,13 @@ Func doTempleBattle()
 
    SetLog("Started battle!", $COLOR_RED)
 
-   ClickPos($BATTLE_DODGE_BUTTON_POS, 800, 2)
+   ClickPos($BATTLE_DODGE_BUTTON_POS, 1200, 2)
+
+   ClickPos($BATTLE_DODGE_BUTTON_POS, 1200, 2)
+
+   ClickPos($BATTLE_DODGE_BUTTON_POS, 1200, 2)
+
+   ClickPos($BATTLE_DODGE_BUTTON_POS, 1200, 2)
 
    Local $limitTime = 150000
 

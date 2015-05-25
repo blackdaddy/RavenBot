@@ -12,22 +12,21 @@
 
 Func AutoFlow()
    ; For test
-   ;MouseClickDrag("left", 556, 409, 556, 27, 50)
-   ;waitBattleScreen()
-   ;doBattle($Id_Adventure)
-   ;doTempleBattle()
-   ;doPvpBattle()
-   ;Local $__newBadgeCount = 0
-   ;sellItems($__newBadgeCount)
-   ;cleanUpItems()
-   ;selectAdventureStage()
-   ;checkInventory()
-   ;waitAdventureScreen()
-   ;selectBuffItem($Id_Raid)
-   ;selectBuffItem($Id_Guild)
-   ;_checkHealthAndEatPotion($Id_Adventure)
-
    If $testMode Then
+	  ;MouseClickDrag("left", 556, 409, 556, 27, 50)
+	  ;waitBattleScreen()
+	  ;doBattle($Id_Adventure)
+	  ;doTempleBattle()
+	  ;doPvpBattle()
+	  ;Local $__newBadgeCount = 0
+	  ;sellItems($__newBadgeCount)
+	  ;cleanUpItems()
+	  ;selectAdventureStage()
+	  ;checkInventory()
+	  ;waitAdventureScreen()
+	  ;selectBuffItem($Id_Raid)
+	  ;selectBuffItem($Id_Guild)
+	  ;_checkHealthAndEatPotion($Id_Adventure)
 	  Return False
    EndIf
 

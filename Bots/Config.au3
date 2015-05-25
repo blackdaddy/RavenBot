@@ -23,6 +23,7 @@ Global $setting_daily_level = 1	; 0~2
 Global $setting_remaining_health_index[$MaxBattleTypeCount] = [4, 4, 4, 4, 4]
 Global $setting_reconnect_timeout_index = 0
 Global $setting_cleanup_drag_count = 1
+Global $setting_traindata_index = 0
 Global $setting_important_item_options[$SETTING_IMPORTANT_ITEM_OPTION_COUNT] = [False, False, False]
 ; ------------------------------
 

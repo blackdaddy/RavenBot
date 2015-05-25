@@ -13,7 +13,7 @@ Func getMaxStageMinor($stageMajor)
    Case 6 To 10
 	  Return 8
    Case 11 To 15
-	  Return 9
+	  Return 10
    Case 16 To 18
 	  Return 5
    EndSwitch
@@ -37,7 +37,6 @@ EndFunc
 
 Func getStaminaCount($stageMajor)
    If $stageMajor <= 5 Then Return 1
-   If $stageMajor <= 12 Then Return 2
    If $stageMajor <= 15 Then Return 3
    If $stageMajor <= 16 Then Return 1
    If $stageMajor <= 17 Then Return 2

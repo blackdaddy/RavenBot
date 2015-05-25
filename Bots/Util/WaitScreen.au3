@@ -22,8 +22,6 @@ Func WaitScreenPixel($colorInfos, $checkOneTime = False)
 	  EndIf
    Next
 
-   If $checkOneTime = False Then $Restart = True
-
    Return False
 
 EndFunc	;==>WaitScreenPixel
@@ -45,7 +43,6 @@ Func WaitScreenImage($image, $bound, $checkOneTime = False)
 	  EndIf
    Next
 
-   If $checkOneTime = False Then $Restart = True
    Return False
 
 EndFunc	;==>WaitScreenImage

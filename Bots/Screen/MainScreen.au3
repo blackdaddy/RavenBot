@@ -10,13 +10,15 @@ Local Const $STAMINA_POTION_BUTTON_POS[2] = [189, 116]
 Local Const $STAMINA_POTION_USE_OK_BUTTON_POS[2] = [474, 366]
 Local Const $MAIN_QUEST_COSE_BUTTON_POS[2] = [720, 442]
 
-Local Const $MAIN_SCREEN_CHECK_REGION = [404, 380, 532, 468]
-Local Const $RAID_POPUP_CLOSE_BUTTON_REGION = [209, 206, 572, 376]
-Local Const $PVP_LOADING_MARK_REGION = [312, 179, 431, 300]
+Local Const $MAIN_SCREEN_CHECK_REGION[4] = [404, 380, 532, 468]
+Local Const $RAID_POPUP_CLOSE_BUTTON_REGION[4] = [209, 206, 572, 376]
+Local Const $PVP_LOADING_MARK_REGION[4] = [312, 179, 431, 300]
+Local Const $GAME_KEY_GUIDE_CLOSE_BUTTON_REGION[4] = [718, 30, 757, 62]
 
 Func waitMainScreen() ;Waits for main screen to popup
    SetLog("Waiting for Main Screen", $COLOR_ORANGE)
    For $i = 0 To $RetryWaitCount
+	  _console("Checking main screen : " & $i);
 	  Local $x, $y
 	  Local $bmpPath = @ScriptDir & "\images\screen_main.bmp"
 
@@ -27,7 +29,7 @@ Func waitMainScreen() ;Waits for main screen to popup
 
 	  _CaptureRegion()
 
-	  If ImageSearchArea($bmpPath, 0, $MAIN_SCREEN_CHECK_REGION, $x, $y, 30) Then
+	  If ImageSearchArea($bmpPath, 0, $MAIN_SCREEN_CHECK_REGION, $x, $y, $DefaultTolerance) Then
 		 SetLog("Main Screen Located", $COLOR_BLUE)
 		 Return True
 	  Else
@@ -37,17 +39,8 @@ Func waitMainScreen() ;Waits for main screen to popup
 
    Next
 
-   ; Now, not used...
-   If 0 Then
-	  SetLog("Unable to load Raven, Restarting...", $COLOR_RED)
-	  Local $RestartApp = StringReplace(_WinAPI_GetProcessFileName(WinGetProcess($Title)), "Frontend", "Restart")
-	  Run($RestartApp & " Android")
-	  If _Sleep(10000) Then Return False
-
-	  Do
-		 If _Sleep(5000) Then Return False
-	  Until ControlGetHandle($Title, "", "BlueStacksApp1") <> 0
-   EndIf
+   SaveImageToFile("main_screen_error")
+   killBlueStack()
 
    Return False
 
@@ -58,8 +51,22 @@ Func checkStamina()
    Local $needStamina = getStaminaCount($setting_stage_major)
    Local $lack = False
    Local $checkingLongTime = False
+   Local $hTimer = TimerInit()
+
+   Local $waitingMsec = ($needStamina * 600000 + 60000) ; 10 min * stamina + extra 1 min
+
    While $RunState
 	  If _Sleep(5000) Then Return
+
+	  Local $fDiff = TimerDiff($hTimer)
+	  If $fDiff > $waitingMsec Then
+		 SetLog("Timeout stamina check.", $COLOR_RED)
+		 SaveImageToFile("stamina_check_error")
+		 killBlueStack()
+		 Return False
+	  EndIf
+
+	  _console("Stamina checking time : " & $fDiff & "<>" & $waitingMsec)
 
 	  _CaptureRegion()
 
@@ -292,7 +299,25 @@ Func checkRavenScreen()
 		 If _Sleep($SleepWaitMSec) Then Return False
 
 		 _CaptureRegion()
+
+		 Local $ok = False
 		 If _ImageSearchArea(String(@ScriptDir & "\images\bluestacks\invalid_game_status_exception.bmp"), 0, 13, 33, 81, 103, $x, $y, 10) Then
+			$ok = True
+		 EndIf
+
+		 If $ok = False Then
+			If _ImageSearch(String(@ScriptDir & "\images\bluestacks\raven_icon.bmp"), 0, $x, $y, 10) Then
+			   $ok = True
+			EndIf
+		 EndIf
+
+		 If $ok = False Then
+			If _ImageSearch(String(@ScriptDir & "\images\bluestacks\raven_guide_text.bmp"), 0, $x, $y, 10) Then
+			   $ok = True
+			EndIf
+		 EndIf
+
+		 If $ok Then
 			SetLog("Valid game screen located.", $COLOR_BLUE)
 			Return True
 		 EndIf
@@ -327,6 +352,28 @@ Func checkRavenScreen()
    Next
 
    Return False
+EndFunc
+
+
+Func closePackagePopup()
+   Local $x, $y
+   Local $ok = False
+    _CaptureRegion()
+
+   If ClickButtonImageArea(String(@ScriptDir & "\images\button_package_close.bmp"), $NOTICE_POPUP_CLOSE_BUTTON_REGION) Then
+	  SetLog("Package Product detected.", $COLOR_PINK)
+	  _Sleep(2000)
+	  $ok = True
+   EndIf
+
+   If ImageSearchArea(String(@ScriptDir & "\images\package_item_text.bmp"), 0, $POPUP_TEXT_REGION, $x, $y, $DefaultTolerance) Then
+	  $ok = True
+	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_ok.bmp"), $POPUP_BUTTON_REGION) Then
+		 SetLog("Package Product canceled.", $COLOR_PINK)
+	  EndIf
+   EndIf
+
+   Return $ok
 EndFunc
 
 
@@ -400,6 +447,11 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  Return True
    EndIf
 
+   If ClickPvPThreeVictoryArea() Then
+	  SetLog("PvP Three victory button detected.", $color)
+	  Return True
+   EndIf
+
    ;-------------------------------------------------------------------------
    ; Ok button checking.. without [cancel] [ok]
    If ClickButtonImageArea(String(@ScriptDir & "\images\button_cancel_red.bmp"), $POPUP_BUTTON_REGION) Then
@@ -432,14 +484,7 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  Return True
    EndIf
    ;-------------------------------------------------------------------------
-
-   If ClickButtonImageArea(String(@ScriptDir & "\images\button_package_close.bmp"), $NOTICE_POPUP_CLOSE_BUTTON_REGION) Then
-	  SetLog("Package Product detected.", $color)
-
-	  _Sleep(2000)
-	  If ClickButtonImageArea(String(@ScriptDir & "\images\button_ok.bmp"), $POPUP_BUTTON_REGION) Then
-		 SetLog("Package Product canceled.", $color)
-	  EndIf
+   If closePackagePopup() Then
 	  Return True
    EndIf
 
@@ -472,6 +517,11 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    If ClickButtonImage(String(@ScriptDir & "\images\bluestacks\button_install_app.bmp")) Then
 	  SetLog("App Install button clicked.", $color)
+	  Return True
+   EndIf
+
+   If ClickButtonImageArea(String(@ScriptDir & "\images\bluestacks\button_key_guide.bmp"), $GAME_KEY_GUIDE_CLOSE_BUTTON_REGION) Then
+	  SetLog("Key guide button clicked.", $color)
 	  Return True
    EndIf
 

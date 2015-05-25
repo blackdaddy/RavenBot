@@ -128,7 +128,7 @@ Func doBattle($battleId)
 			   $hTimerEatPotion = TimerInit()
 			EndIf
 		 Else
-			_console("Already eat potion.. wait sec for " &
+			_console("Already eat potion.. wait sec for " & ($POTION_EAT_DELAY_MSEC - Int(TimerDiff($hTimerEatPotion))))
 		 EndIf
 	  EndIf
 

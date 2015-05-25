@@ -57,16 +57,22 @@ Global $hHBitmap; Handle Image for pixel functions
 Global $dirLogs = @ScriptDir & "\logs\"
 Global $dirCapture = @ScriptDir & "\capture\"
 Global $dirLoots = @ScriptDir & "\loots\"
+Global $dirTrain = @ScriptDir & "\train\"
 Global $ReqText
 Global $config = @ScriptDir & "\config.ini"
 
 Global $BSpos[2] ; Inside BlueStacks positions relative to the screen
 
+Global Const $RestartAppErrorCount = 4
+
 Global Const $RetryWaitCount = 30
 Global Const $SleepWaitMSec = 1500
 
+Global Const $RetryWaitCountButton = 5
 Global Const $RetryWaitCountShort = 18
+
 Global Const $SleepWaitMSecShort = 800
+Global Const $SleepWaitMSecFast = 500
 Global Const $SleepWaitMSecVeryFast = 200
 
 Global Const $MaxStageNumber = 18

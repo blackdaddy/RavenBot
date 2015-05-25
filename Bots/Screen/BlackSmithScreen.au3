@@ -9,9 +9,10 @@
 #ce ----------------------------------------------------------------------------
 
 Local $BLACKSMITH_TAB_REGION[4] = [39, 80, 360, 122]
-Local $INVENTORY_TAB1_BUTTON_POS[2] = [448, 85]
-Local $INVENTORY_TAB2_BUTTON_POS[2] = [548, 85]
-Local $INVENTORY_TAB3_BUTTON_POS[2] = [648, 85]
+Local $INVENTORY_TAB1_BUTTON_POS[2] = [424, 85]
+Local $INVENTORY_TAB2_BUTTON_POS[2] = [514, 85]
+Local $INVENTORY_TAB3_BUTTON_POS[2] = [596, 85]
+Local $INVENTORY_TAB4_BUTTON_POS[2] = [682, 85]
 Local $ITEM_INFO_REGION[4] = [392, 102, 721, 300]
 Local $ITEM_OPTION_REGION[4] = [498, 176, 718, 339]
 Local $ITEM_INFO_CLOSE_BUTTON_REGION[4] = [693, 60, 729, 99]
@@ -57,7 +58,7 @@ EndFunc
 Func cleanUpItems()
    SetLog("Started clean up items..", $COLOR_ORANGE)
 
-   For $i = 1 To 3
+   For $i = 1 To 4
 	  Local $tabPos[2]
 	  Switch $i
 	  Case 1
@@ -66,6 +67,8 @@ Func cleanUpItems()
 		 $tabPos = $INVENTORY_TAB2_BUTTON_POS
 	  Case 3
 		 $tabPos = $INVENTORY_TAB3_BUTTON_POS
+	  Case 4
+		 $tabPos = $INVENTORY_TAB4_BUTTON_POS
 	  EndSwitch
 
 	  ClickPos($tabPos, $SleepWaitMSecShort)
@@ -151,6 +154,10 @@ Func _doLevelUpProcess(ByRef $stopFlag, $currDragCount)
 
    If IsArray($availableItemSlots) = False Then
 	  ; Complete all task... stop..
+	  Return False
+   EndIf
+
+   If $preferredItemSlotIndex < 0 OR $preferredItemSlotIndex >= 6 Then
 	  Return False
    EndIf
 
@@ -503,6 +510,12 @@ Func _findOneLevelUpItem(ByRef $preferredIndex, ByRef $stopFlag)
    While $itemSlotNumber <= 6
 	  Local $bound = itemSlotBound($itemSlotNumber)
 
+	  If ImageSearchArea(@ScriptDir & "\images\blacksmith\empty_slot.BMP", 0, $bound, $x, $y, $DefaultTolerance/2) Then
+		 SetLog("Checking item " & $itemSlotNumber & ": empty", $COLOR_DARKGREY)
+		 $stopFlag = True
+		 ExitLoop
+	  EndIf
+
 	  Local $pos = _PixelSearch($bound[0], $bound[1], $bound[0] + $ItemLevelCircleWidth, $bound[1] + $ItemLevelCircleHeight, Hex($MAX_LEVEL_COLOR, 6), 10)
 
 	  If IsArray($pos) = False Then
@@ -511,10 +524,6 @@ Func _findOneLevelUpItem(ByRef $preferredIndex, ByRef $stopFlag)
 
  		 Local $itemLevel = getItemLevel()
 		 _console("console : item level = " & $itemSlotNumber & ", level = " & $itemLevel)
-
-		 If _isThisLevelOneItem() = False Then
-			If $preferredIndex < 0 Then $preferredIndex = $itemSlotNumber - 1
-		 EndIf
 
 		 If _checkThisItemOptions() = False Then
 			SetLog("Checking item " & $itemSlotNumber & ": important", $COLOR_BLUE)
@@ -549,6 +558,10 @@ Func _findOneLevelUpItem(ByRef $preferredIndex, ByRef $stopFlag)
 			Else
 			   _log("####### Item level-up register ####### : " & $itemSlotNumber & " = " & $itemLevel & " <> " & $setting_item_sell_maximum_level )
 			   SetLog("Checking item " & $itemSlotNumber & ": food", $COLOR_GREEN)
+
+			   If _isThisLevelOneItem() = False Then
+				  If $preferredIndex < 0 Then $preferredIndex = $itemSlotNumber - 1
+			   EndIf
 
 			   $availableItemSlots[$itemSlotNumber - 1] = True
 			   $itemSlotNumber = $itemSlotNumber + 1
@@ -708,6 +721,7 @@ Func sortItemGradeUp()
 		 EndIf
 	  Else
 		 SetLog("Sorted item grade", $COLOR_BLUE)
+		 If _Sleep($SleepWaitMSecVeryFast) Then Return False
 		 Return True
 	  EndIf
    Next

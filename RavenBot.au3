@@ -1,11 +1,11 @@
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
-#pragma compile(ProductVersion, 1.9)
-#pragma compile(FileVersion, 1.9)
+#pragma compile(ProductVersion, 2.0)
+#pragma compile(FileVersion, 2.0)
 #pragma compile(LegalCopyright, ?The Bytecode Club)
 
 $sBotName = "Raven Bot"
-$sBotVersion = "1.9"
+$sBotVersion = "2.0"
 $sBotTitle = "AutoIt " & $sBotName & " v" & $sBotVersion
 
 If _Singleton($sBotTitle, 1) = 0 Then
@@ -63,6 +63,7 @@ GUIRegisterMsg($WM_SYSCOMMAND, "GUIControl")
 DirCreate($dirLogs)
 DirCreate($dirCapture)
 DirCreate($dirLoots)
+DirCreate($dirTrain)
 
 _GDIPlus_Startup()
 CreateLogFile()
@@ -134,15 +135,6 @@ Func runBot()
    clearStats()
    updateStats()
 
-   While $testMode = False
-	  If closeAllPopupOnMainScreen(True) = False Then
-		 ExitLoop
-	  EndIf
-	  If _Sleep(2000) Then ExitLoop
-   WEnd
-
-   SetLog("Start point found", $COLOR_BLUE)
-
    While $RunState
 
 	  If ProcessExists($ProcessName) = False Then
@@ -182,11 +174,20 @@ Func runBot()
       loadConfig()
 	  applyConfig()
 
-	  if $loopCount > 0 Then
-		 _GUICtrlEdit_SetText($txtLog, "")
+	  If $firstFlag AND $testMode = False Then
+		 SetLog("Checking start screen...", $COLOR_ORANGE)
+		 Local $tempCount = 1
+		 For $tempCount = 1 To 20
+			If closeAllPopupOnMainScreen(True) = False Then
+			   ExitLoop
+			EndIf
+			If _Sleep(2000) Then ExitLoop
+		 Next
+
+		 SetLog("Start Loop : " & $loopCount + 1, $COLOR_PURPLE)
 	  EndIf
 
-	  SetLog("Start Loop : " & $loopCount + 1, $COLOR_PURPLE)
+	  $firstFlag = False
 
 	  Local $res = AutoFlow()
 
@@ -203,6 +204,12 @@ Func runBot()
 			; only saved screen shot at first error
 			SaveImageToFile()
 		 EndIf
+
+		 If $errorCount >= $RestartAppErrorCount Then
+			SaveImageToFile("max_error")
+			killBlueStack()
+			SetLog("Kill the bluestack to resolve the error.", $COLOR_RED)
+		 EndIf
 	  Else
 		 $errorCount = 0
 		 $loopCount = $loopCount + 1
@@ -212,6 +219,12 @@ Func runBot()
 		 $lastElapsed = StringFormat("%02i:%02i:%02i", $iHour, $iMin, $iSec)
 
 		 updateStats()
+
+		 ; Success and go to first
+		 If $loopCount > 0 Then
+			_GUICtrlEdit_SetText($txtLog, "")
+		 EndIf
+		 SetLog("Start Loop : " & $loopCount + 1, $COLOR_PURPLE)
 	  EndIf
 
 	  If $testMode Then

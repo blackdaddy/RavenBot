@@ -43,6 +43,9 @@ EndFunc
 
 
 Func runBlueStack()
+   $restartCount = $restartCount + 1
+   updateStats()
+
    Local $sWow64 = ""
    If @AutoItX64 Then $sWow64 = "\Wow6432Node"
    Local $sFile = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE" & $sWow64 & "\BlueStacks", "InstallDir") & "\HD-StartLauncher.exe"
@@ -51,6 +54,9 @@ EndFunc
 
 
 Func killBlueStack()
+   $errorCount = 0
+   updateStats()
+
    Local $pid = ProcessExists($ProcessNameForKill)
    If $pid <> 0 Then
 	  ProcessClose($pid)

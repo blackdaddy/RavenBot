@@ -3,6 +3,7 @@ Local Const $PVP_READY_BUTTON_POS[2] = [555, 421]
 
 Local Const $PVP_BATTLE_PAUSE_REGION[4] = [684, 22, 750, 84]
 Local Const $RESULT_PVP_BUTTON_REGION[4] = [520, 385, 702, 467]
+Local Const $PVP_THREE_VICTORY_REGION[4] = [161, 377, 268, 408]
 
 Local Const $MAX_RETRY_CLICK_COUNT = 5
 
@@ -226,3 +227,8 @@ Func _checkHealthAndEatPotionForPvP()
    EndIf
    Return False
 EndFunc	;==> _checkHealthAndEatPotionForPvP
+
+
+Func ClickPvPThreeVictoryArea()
+   Return ClickButtonImageArea(String(@ScriptDir & "\images\pvp_three_victory.bmp"), $PVP_THREE_VICTORY_REGION)
+EndFunc
