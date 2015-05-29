@@ -20,7 +20,7 @@ Func AutoFlow()
 	  ;doPvpBattle()
 	  ;Local $__newBadgeCount = 0
 	  ;sellItems($__newBadgeCount)
-	  ;cleanUpItems()
+	  cleanUpItems()
 	  ;selectAdventureStage()
 	  ;checkInventory()
 	  ;waitAdventureScreen()

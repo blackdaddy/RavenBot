@@ -121,6 +121,10 @@ EndFunc
 
 
 Func _removeLevelUpItemSlot()
+   If _isEmptyLevelUpItemSlot() Then
+	  Return True
+   EndIf
+
    For $i = 0 To $RetryWaitCountShort
 	  Click(161, 102)
 	  If _Sleep(400) Then Return False
@@ -304,7 +308,7 @@ Func sellItems(ByRef $newBadgeCount)
 
 		 If $itemLevel >= $setting_loot_capture_level Then
 			_log("@@@@@@@ Loot Item @@@@@@@ : " & $itemLevel)
-			 _CaptureRegionArea($ITEM_INFO_REGION)
+			_CaptureRegionArea($ITEM_INFO_REGION)
 			SaveImageToFile("loot_" & $itemLevel, $dirLoots, "bmp");
 		 EndIf
 

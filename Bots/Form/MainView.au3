@@ -297,7 +297,7 @@ For $i = 1 To 6
    GUICtrlSetData($comboLootItemLevel, "Level " & $i)
 Next
 
-For $i = 1 To 3
+For $i = 1 To 2
    GUICtrlSetData($comboLunchBoxItemLevel, "Level " & $i)
 Next
 

@@ -8,7 +8,7 @@ Local Const $ADVENTURE_PORTAL_BUTTON_POS[2] = [688, 432]
 Local Const $ADVENTURE_READY_BUTTON_POS[2] = [412, 398]
 
 
-Func waitAdventureScreen()
+Func waitAdventureScreen($checkMode = False)
    SetLog("Waiting for Adventure Screen", $COLOR_ORANGE)
    For $i = 0 To $RetryWaitCount
 	  _CaptureRegion()
@@ -16,6 +16,9 @@ Func waitAdventureScreen()
 	  Local $x, $y
 	  Local $bmpPath = @ScriptDir & "\images\adventure_text.bmp"
 	  If ImageSearchArea($bmpPath, 0, $LEFT_TOP_SCREEN_NAME_REGION, $x, $y, 30) = False Then
+
+		 If $checkMode Then Return False
+
 		 If _Sleep($SleepWaitMSec) Then Return False
 
 		 ; Checking RAID
@@ -33,9 +36,13 @@ Func waitAdventureScreen()
 		 If _Sleep($SleepWaitMSec) Then ExitLoop
 
 	  Else
+		 If $checkMode Then Return True
+
 		 SetLog("Adventure Screen Located", $COLOR_BLUE)
 		 Return True
 	  EndIf
+
+	  If $checkMode Then Return False	; Only one loop
    Next
 
    SetLog("Adventure Screen Timeout", $COLOR_RED)
@@ -95,6 +102,8 @@ Func selectAdventureStage()
 
    Next
 
+   If waitAdventureScreen(True) = False Then Return False
+
    If $found = -1 Then
 	  SetLog($i & " Stage not found. setting = " & $setting_stage_major, $COLOR_RED)
    Else
@@ -104,12 +113,16 @@ Func selectAdventureStage()
 
 		 If $moveCount > 0 Then
 			For $i = 1 To $moveCount
+			   If waitAdventureScreen(True) = False Then Return False
 			   ClickPos($ADVENTURE_LEFT_BUTTON_POS)
+			   If _Sleep($SleepWaitMSecShort) Then Return False
 			Next
 		 Else
 			$moveCount = $moveCount * -1
 			For $i = 1 To $moveCount
+			   If waitAdventureScreen(True) = False Then Return False
 			   ClickPos($ADVENTURE_RIGHT_BUTTON_POS)
+			   If _Sleep($SleepWaitMSecShort) Then Return False
 			Next
 		 EndIf
 	  EndIf

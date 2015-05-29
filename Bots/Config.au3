@@ -22,7 +22,7 @@ Global $setting_daily_adventure_enabled = True
 Global $setting_daily_level = 1	; 0~2
 Global $setting_remaining_health_index[$MaxBattleTypeCount] = [4, 4, 4, 4, 4]
 Global $setting_reconnect_timeout_index = 0
-Global $setting_cleanup_drag_count = 1
+Global $setting_cleanup_drag_count = 0
 Global $setting_traindata_index = 0
 Global $setting_important_item_options[$SETTING_IMPORTANT_ITEM_OPTION_COUNT] = [False, False, False]
 ; ------------------------------
@@ -84,6 +84,8 @@ Func loadConfig()
 	  $setting_reconnect_timeout_index = Int(IniRead($config, $setting_common_group, "reconnect_timeout_index", "2"))
 
 	  $setting_daily_level = Int(IniRead($config, $setting_common_group, "daily_level", "1"))
+
+	  $setting_traindata_index = Int(IniRead($config, $setting_common_group, "traindata_index", "0"))
    EndIf
 EndFunc	;==>loadConfig
 
@@ -183,6 +185,19 @@ Func applyConfig()
 EndFunc	;==>applyConfig
 
 
+Func clearTrainDataIndex()
+   $setting_traindata_index = 0
+   IniWrite($config, $setting_common_group, "traindata_index", $setting_traindata_index)
+EndFunc	;==>clearTrainDataIndex
+
+
+Func makeTrainDataIndex()
+   $setting_traindata_index = $setting_traindata_index + 1
+   IniWrite($config, $setting_common_group, "traindata_index", $setting_traindata_index)
+   Return $setting_traindata_index
+EndFunc	;==>clearTrainDataIndex
+
+
 Func saveConfig()
    Local $pos = WinGetPos($mainView)
    If $pos[0] <> -32000 Then
@@ -219,6 +234,8 @@ Func saveConfig()
    IniWrite($config, $setting_common_group, "loot_item_level", _GUICtrlComboBox_GetCurSel($comboLootItemLevel))
    IniWrite($config, $setting_common_group, "daily_level", _GUICtrlComboBox_GetCurSel($comboDailyLevel))
    IniWrite($config, $setting_common_group, "reconnect_timeout_index", _GUICtrlComboBox_GetCurSel($comboReconnectTimeout))
+
+   IniWrite($config, $setting_common_group, "traindata_index", $setting_traindata_index)
 EndFunc	;==>saveConfig
 
 Func _IsChecked($idControlID)
