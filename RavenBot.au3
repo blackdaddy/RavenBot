@@ -1,11 +1,11 @@
 #pragma compile(FileDescription, Raven Bot)
 #pragma compile(ProductName, Raven Bot)
-#pragma compile(ProductVersion, 2.1)
-#pragma compile(FileVersion, 2.1)
+#pragma compile(ProductVersion, 2.2)
+#pragma compile(FileVersion, 2.2)
 #pragma compile(LegalCopyright, ?The Bytecode Club)
 
 $sBotName = "Raven Bot"
-$sBotVersion = "2.1"
+$sBotVersion = "2.2"
 $sBotTitle = "AutoIt " & $sBotName & " v" & $sBotVersion
 
 If _Singleton($sBotTitle, 1) = 0 Then
@@ -179,6 +179,7 @@ Func runBot()
 		 Local $tempCount = 1
 		 For $tempCount = 1 To 20
 			If closeAllPopupOnMainScreen(True) = False Then
+			   SetLog("Start screen located.", $COLOR_BLUE)
 			   ExitLoop
 			EndIf
 			If _Sleep(2000) Then ExitLoop

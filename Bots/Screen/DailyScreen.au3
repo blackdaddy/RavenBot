@@ -158,6 +158,7 @@ Func doTempleBattle()
    Local $limitTime = 150000
 
    Local $hTimer = TimerInit()
+   Local $skillIndex = 0
    While 1
 	  If Int(TimerDiff($hTimer)) > $limitTime Then	; 11 min for raid
 		 SetLog("Unexpected battle detected...", $COLOR_RED)
@@ -181,14 +182,23 @@ Func doTempleBattle()
 		 ExitLoop
 	  EndIf
 
-	  ClickPos($BATTLE_ATTACK_BUTTON_POS, 200, 8)
-
 	  ; Battle Action!!
-	  ClickPos($BATTLE_SKILL1_BUTTON_POS, 200, 4)
-	  ClickPos($BATTLE_SKILL2_BUTTON_POS, 200, 2)
-	  ClickPos($BATTLE_SKILL3_BUTTON_POS, 200, 2)
-	  ClickPos($BATTLE_SKILL4_BUTTON_POS, 200, 2)
-	  ClickPos($BATTLE_DODGE_BUTTON_POS, 200, 2)
+	  Switch Int(Mod($skillIndex, 5))
+	  Case 0
+		 ClickPos($BATTLE_SKILL1_BUTTON_POS, 200, 2)
+	  Case 1
+		 ClickPos($BATTLE_SKILL2_BUTTON_POS, 200, 2)
+	  Case 2
+		 ClickPos($BATTLE_SKILL3_BUTTON_POS, 200, 2)
+	  Case 3
+		 ClickPos($BATTLE_SKILL4_BUTTON_POS, 200, 2)
+	  Case 4
+		 ClickPos($BATTLE_DODGE_BUTTON_POS, 200, 2)
+	  EndSwitch
+
+	  ClickPos($BATTLE_ATTACK_BUTTON_POS, 200, 5)
+
+	  $skillIndex = $skillIndex + 1
    WEnd
 
    ; Click Main Button

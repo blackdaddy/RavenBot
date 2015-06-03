@@ -377,6 +377,20 @@ Func closePackagePopup()
 EndFunc
 
 
+Func closeNoticePopup()
+   Local $x, $y
+   Local $ok = False
+    _CaptureRegion()
+
+   If ImageSearchArea(String(@ScriptDir & "\images\notice_icon.bmp"), 0, $NOTICE_ICON_REGION, $x, $y, $DefaultTolerance) Then
+	  SetLog("Notice popup detected.", $COLOR_PINK)
+	  Click(726, 451);
+	  Return True
+   EndIf
+   Return False
+EndFunc
+
+
 Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 
    Local $color = $COLOR_PINK
@@ -401,6 +415,8 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 		 Return True
 	  EndIf
    EndIf
+
+   If closeNoticePopup() Then Return True
 
    If ClickButtonImageArea(String(@ScriptDir & "\images\screen_start.bmp"), $GAME_START_REGION) Then
 	  SetLog("Game Start detected.", $color)
@@ -529,5 +545,6 @@ Func closeAllPopupOnMainScreen($forceMode = False, $clickBackButton = True)
 	  Return True
    EndIf
 
+   _console("closeAllPopupOnMainScreen return false")
    Return False
 EndFunc	;==>closeAllPopupOnMainScreen

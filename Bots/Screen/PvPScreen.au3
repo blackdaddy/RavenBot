@@ -97,7 +97,7 @@ Func startPvpBattle()
 
 	  ; For checking if battle already started by some reason (miss click, or double click..)
 	  If _waitPvpBattleScreen(True) Then
-		 SetLog("PvP Battle Ready Screen Skipped", $COLOR_BLUE)
+		 SetLog("Skipped PvP Battle Ready Screen", $COLOR_BLUE)
 		 Return True
 	  EndIf
 
@@ -149,6 +149,8 @@ Func doPvpBattleScreen()
 	  If _Sleep(2000) Then Return
 
 	  ClickPos($BATTLE_DODGE_BUTTON_POS, 500, 2)
+
+	  ClickPos($BATTLE_SKILL4_BUTTON_POS, 200, 4)
 
 	  If $setting_eat_potion[$Id_Pvp] Then
 		 If Int(TimerDiff($hTimerEatPotion)) > $PVP_POTION_EAT_DELAY_MSEC Then

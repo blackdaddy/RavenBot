@@ -99,6 +99,8 @@ Func waitBattleReadyScreen($checkOne = False)
 		 ; TODO : known issue : this ready button is only working from Adventure Battle mode......
 		 ; Dirty codes.....
 		 _clickReadyButton()	; refer to AdventureScreen.au3
+
+		 _Sleep(2500)
 	  EndIf
 
 	  _Sleep($SleepWaitMSec)

@@ -13,6 +13,7 @@
 Func AutoFlow()
    ; For test
    If $testMode Then
+	  ;doTempleBattle()
 	  ;MouseClickDrag("left", 556, 409, 556, 27, 50)
 	  ;waitBattleScreen()
 	  ;doBattle($Id_Adventure)
@@ -112,15 +113,16 @@ Func checkInventory()
    EndIf
 
    Local $newBadgeCount = 0
-
-   If $newBadgeDetected Then
-	  If sellItems($newBadgeCount) = False Then
-		 Return False
-	  EndIf
-   EndIf
-
+   Local $cleanUpFlag = False
    If $setting_item_sell_loop_index >= 0 AND Mod($loopCount, currentItemCleanUpLoopCount()) == 0 Then
 	  If cleanUpItems() = False Then
+		 Return False
+	  EndIf
+	  $cleanUpFlag = True
+   EndIf
+
+   If $newBadgeDetected AND $setting_item_sell_maximum_level > 0 AND $cleanUpFlag = False Then
+	  If sellItems($newBadgeCount) = False Then
 		 Return False
 	  EndIf
    EndIf

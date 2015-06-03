@@ -58,28 +58,38 @@ EndFunc
 Func cleanUpItems()
    SetLog("Started clean up items..", $COLOR_ORANGE)
 
-   For $i = 1 To 4
+   Local $tabIndex = 0
+   For $tabIndex = 0 To 3
 	  Local $tabPos[2]
-	  Switch $i
-	  Case 1
+	  Switch $tabIndex
+	  Case 0
 		 $tabPos = $INVENTORY_TAB1_BUTTON_POS
-	  Case 2
+	  Case 1
 		 $tabPos = $INVENTORY_TAB2_BUTTON_POS
-	  Case 3
+	  Case 2
 		 $tabPos = $INVENTORY_TAB3_BUTTON_POS
-	  Case 4
+	  Case 3
 		 $tabPos = $INVENTORY_TAB4_BUTTON_POS
 	  EndSwitch
 
 	  ClickPos($tabPos, $SleepWaitMSecShort)
 
 	  Local $currDragCount = 0
+	  Local $remoteAlwaysSlotFlag = False
+	  For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1
+		 If $setting_important_item_options[$i] = True Then
+			$remoteAlwaysSlotFlag = True
+			ExitLoop
+		 EndIf
+	  Next
 
 	  While True
 		 SetLog("Item level-up loop started : dragging = " & $currDragCount, $COLOR_GREEN)
 		 If _Sleep($SleepWaitMSecShort) Then Return False
 
-		 If _removeLevelUpItemSlot() = False Then Return False
+		 ;If $remoteAlwaysSlotFlag Then
+			If _removeLevelUpItemSlot() = False Then Return False
+		 ;EndIf
 
 		 If sortItemGradeUp() = False Then Return False
 
@@ -96,6 +106,8 @@ Func cleanUpItems()
 			   If $currDragCount > $setting_cleanup_drag_count Then ExitLoop
 			   ContinueLoop
 			EndIf
+
+			_console("finish clean up")
 			ExitLoop
 		 EndIf
 	  WEnd

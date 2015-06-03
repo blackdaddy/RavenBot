@@ -13,7 +13,7 @@ Func waitBattleScreen($checkMode = False)
 
    Local $x, $y
 
-   For $i = 0 To $RetryWaitCount
+   For $i = 0 To ($RetryWaitCount * 2)
 	  _CaptureRegion()
 
 	  If WaitScreenPixel($BATTLE_COLOR, True) = False Then
