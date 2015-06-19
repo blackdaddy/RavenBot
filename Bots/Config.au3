@@ -21,6 +21,7 @@ Global $setting_daily_enabled = False
 Global $setting_daily_adventure_enabled = True
 Global $setting_daily_level = 1	; 0~2
 Global $setting_remaining_health_index[$MaxBattleTypeCount] = [4, 4, 4, 4, 4]
+Global $setting_dodge_interval_index[$MaxBattleTypeCount] = [3, 3, 3, 3, 3]
 Global $setting_reconnect_timeout_index = 0
 Global $setting_cleanup_drag_count = 0
 Global $setting_traindata_index = 0
@@ -71,6 +72,7 @@ Func loadConfig()
 		 $setting_use_buff_items[$i][3] = IniRead($config, $setting_common_group, "use_buff_" & $i & "_4", "False") == "True" ? True : False
 		 $setting_eat_potion[$i] = IniRead($config, $setting_common_group, "eat_potion_" & $i, "False") == "True" ? True : False
 		 $setting_remaining_health_index[$i] = Int(IniRead($config, $setting_common_group, "health_condition_index_" & $i, "4"))
+		 $setting_dodge_interval_index[$i] = Int(IniRead($config, $setting_common_group, "dodge_interval_index_" & $i, "4"))
 	  Next
 
 	  For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1
@@ -131,6 +133,12 @@ Func applyConfig()
 	  EndIf
 
 	  _GUICtrlComboBox_SetCurSel($comboBattleHealthCondition[$i], Int($setting_remaining_health_index[$i]))
+
+	  _GUICtrlComboBox_SetCurSel($comboBattleDodgeInterval[$i], Int($setting_dodge_interval_index[$i]))
+
+	  If _GUICtrlComboBox_GetCurSel($comboBattleDodgeInterval[$i]) < 0 Then
+		 _GUICtrlComboBox_SetCurSel($comboBattleDodgeInterval[$i], 3)
+	  EndIf
    Next
 
    If $setting_pvp_enabled = 1 Then
@@ -219,6 +227,7 @@ Func saveConfig()
 	  IniWrite($config, $setting_common_group, "use_buff_" & $i & "_4", _IsChecked($checkBuffAutoSkill[$i]))
 	  IniWrite($config, $setting_common_group, "eat_potion_" & $i, _IsChecked($checkBattleEatPotion[$i]))
 	  IniWrite($config, $setting_common_group, "health_condition_index_" & $i, _GUICtrlComboBox_GetCurSel($comboBattleHealthCondition[$i]))
+	  IniWrite($config, $setting_common_group, "dodge_interval_index_" & $i, _GUICtrlComboBox_GetCurSel($comboBattleDodgeInterval[$i]))
    Next
 
    For $i = 0 To $SETTING_IMPORTANT_ITEM_OPTION_COUNT - 1

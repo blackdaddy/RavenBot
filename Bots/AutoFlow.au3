@@ -13,6 +13,8 @@
 Func AutoFlow()
    ; For test
    If $testMode Then
+	  ;startGuildBattle();
+	  ;Return;
 	  ;doTempleBattle()
 	  ;MouseClickDrag("left", 556, 409, 556, 27, 50)
 	  ;waitBattleScreen()
@@ -21,8 +23,8 @@ Func AutoFlow()
 	  ;doPvpBattle()
 	  ;Local $__newBadgeCount = 0
 	  ;sellItems($__newBadgeCount)
-	  cleanUpItems()
-	  ;selectAdventureStage()
+	  ;cleanUpItems()
+	  selectAdventureStage()
 	  ;checkInventory()
 	  ;waitAdventureScreen()
 	  ;selectBuffItem($Id_Raid)

@@ -63,7 +63,7 @@ Global $config = @ScriptDir & "\config.ini"
 
 Global $BSpos[2] ; Inside BlueStacks positions relative to the screen
 
-Global Const $RestartAppErrorCount = 4
+Global Const $RestartAppErrorCount = 2
 
 Global Const $RetryWaitCount = 30
 Global Const $SleepWaitMSec = 1500
@@ -75,7 +75,7 @@ Global Const $SleepWaitMSecShort = 800
 Global Const $SleepWaitMSecFast = 500
 Global Const $SleepWaitMSecVeryFast = 200
 
-Global Const $MaxStageNumber = 18
+Global Const $MaxStageNumber = 21
 Global Const $IdleMsec = 1000
 
 Global Const $DefaultTolerance = 30

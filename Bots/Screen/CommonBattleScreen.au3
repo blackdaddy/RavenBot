@@ -71,7 +71,10 @@ Func doBattle($battleId)
    Local $firstLoop = True
    Local $hTimerBattle = TimerInit()
    Local $hTimerEatPotion = TimerInit()
+   Local $hTimerDodge = TimerInit()
    Local $eatPotionFlag = False
+
+   Local $index = 0
    While 1
 	  If _selectAutoBattle() Then
 		 ; Wait for reaching to Enemy
@@ -113,7 +116,7 @@ Func doBattle($battleId)
 		 ExitLoop
 	  EndIf
 
-	  If _Sleep(2000) Then Return False
+	  ;If _Sleep(2000) Then Return False
 
 	  ; Health Check
 	  If $setting_eat_potion[$battleId] Then
@@ -132,14 +135,34 @@ Func doBattle($battleId)
 		 EndIf
 	  EndIf
 
+	  $index = $index + 1
+	  $skillNum = Mod($index, 3) + 1
+
 	  ; Battle Action!!
 	  If $setting_use_buff_items[$battleId][3] = False Then	; Checking auto skill buff
-		  ClickPos($BATTLE_SKILL1_BUTTON_POS, 200, 4)
-		  ClickPos($BATTLE_SKILL2_BUTTON_POS, 200, 4)
-		  ClickPos($BATTLE_SKILL3_BUTTON_POS, 200, 4)
-		  ClickPos($BATTLE_SKILL4_BUTTON_POS, 200, 4)
+		 Switch $skillNum
+			Case 1
+			   ClickPos($BATTLE_SKILL1_BUTTON_POS, 50, 2)
+			Case 2
+			   ClickPos($BATTLE_SKILL2_BUTTON_POS, 50, 2)
+			Case 3
+			   ClickPos($BATTLE_SKILL3_BUTTON_POS, 50, 2)
+		 EndSwitch
+		 ClickPos($BATTLE_SKILL4_BUTTON_POS, 50, 2)
 	  EndIf
-	  ClickPos($BATTLE_DODGE_BUTTON_POS, 500, 2)
+
+	  ; Check Dodge skill interval
+	  Local $intervalDodge = _GUICtrlComboBox_GetCurSel($comboBattleDodgeInterval[$battleId]);
+
+	  If $intervalDodge = 0 Then
+		 ContinueLoop
+	  EndIf
+
+	  If Int(TimerDiff($hTimerDodge)) > $intervalDodge Then
+		 ClickPos($BATTLE_DODGE_BUTTON_POS, 100, 2)
+		 $hTimerDodge = TimerInit()
+		 _Sleep(50)
+	  EndIf
    WEnd
 
    ; Click Main Button

@@ -59,15 +59,23 @@ Func selectAdventureStage()
 
    Local $beginStage = 1
    Local $endStage = 1
+   Local $clickX = 532
+   Local $clickY = 425
 
    If Int($setting_stage_major) <= 15 Then
 	  $beginStage = 1
 	  $endStage = 15
-	  $bmpPath = @ScriptDir & "\images\stage_portal_beachcliff.bmp"
-   Else
+	  $bmpPath = @ScriptDir & "\images\stage_portal_matera.bmp"
+   ElseIf Int($setting_stage_major) <= 18 Then
 	  $beginStage = 16
 	  $endStage = 18
-	  $bmpPath = @ScriptDir & "\images\stage_portal_matera.bmp"
+	  $clickX = 615
+	  $bmpPath = @ScriptDir & "\images\stage_portal_beachcliff.bmp"
+   Else
+	  $beginStage = 19
+	  $endStage = 21
+	  $clickX = 690
+	  $bmpPath = @ScriptDir & "\images\stage_portal_beachvalley.bmp"
    EndIf
 
    ; Check current adventure land
@@ -76,12 +84,12 @@ Func selectAdventureStage()
    For $i = 0 To $RetryWaitCountShort
 	  _CaptureRegion()
 
-	  If _ImageSearchArea($bmpPath, 0, 635, 388, 720, 476, $x, $y, $DefaultTolerance) Then
+	  If _ImageSearchArea($bmpPath, 0, 487, 388, 720, 450, $x, $y, $DefaultTolerance) Then
 		 ExitLoop
 	  EndIf
 
 	  SetLog("Switch the adventure land " & $bmpPath, $COLOR_PINK)
-	  ClickPos($ADVENTURE_PORTAL_BUTTON_POS)
+	  Click($clickX, $clickY)
 
 	  If _Sleep(2000) Then Return False
    Next
@@ -94,7 +102,7 @@ Func selectAdventureStage()
 
 	  _CaptureRegion()
 
-	  If _ImageSearchArea($bmpPath, 0, 4, 344, 178, 470, $x, $y, $DefaultTolerance / 3) Then
+	  If _ImageSearchArea($bmpPath, 0, 0, 325, 130, 385, $x, $y, 8) Then
 		 SetLog($i & " Stage found. setting = " & $setting_stage_major, $COLOR_PINK)
 		 $found = $i
 		 ExitLoop

@@ -46,9 +46,18 @@ Func startGuildBattle()
 
 	  If clickOkButton() == 2 Then ExitLoop
 
+	  If _ImageSearchArea(String(@ScriptDir & "\images\button_guild_attendance_tab.bmp"), 0, 163, 67, 271, 96, $x, $y, $DefaultTolerance) Then
+		 Click(84, 264)
+		 Local $region = [570, 300, 712, 351];
+		 ClickButtonImageArea(String(@ScriptDir & "\images\button_guild_attendance_reward.bmp"), $region);
+		 _Sleep(1000)
+		 clickOkButton()
+		 SetLog("Guild Attendace checked.", $COLOR_BLUE)
+	  EndIf
+
 	  ClickButtonImageArea(String(@ScriptDir & "\images\button_guild_battle.bmp"), $GUILD_BATTLE_BUTTON_REGION)
 
-	  If ImageSearchArea(String(@ScriptDir & "\images\button_battle_ready.bmp"), 0, $BATTLE_READY_BUTTON_REGION, $x, $y, 80) Then
+	  If ImageSearchArea(String(@ScriptDir & "\images\button_battle_ready.bmp"), 0, $BATTLE_READY_BUTTON_REGION, $x, $y, $DefaultTolerance) Then
 		 If $clickedReward = False Then
 			_Sleep(1000)
 
@@ -135,7 +144,7 @@ Func _waitGuildBattleScreen()
 
 	  Local $x, $y
 	  Local $bmpPath = @ScriptDir & "\images\battle_guild_mark.bmp"
-	  If ImageSearchArea($bmpPath, 0, $GUILD_BATTLE_MARK_REGION, $x, $y, 30) = False Then
+	  If ImageSearchArea($bmpPath, 0, $GUILD_BATTLE_MARK_REGION, $x, $y, $DefaultTolerance) = False Then
 		 Click(400, 200)	; Click anywhere to start
 		 If _Sleep($SleepWaitMSec) Then Return False
 	  Else

@@ -43,6 +43,7 @@ EndFunc
 
 
 Func runBlueStack()
+   $errorCount = 0
    $restartCount = $restartCount + 1
    updateStats()
 
@@ -54,9 +55,6 @@ EndFunc
 
 
 Func killBlueStack()
-   $errorCount = 0
-   updateStats()
-
    Local $pid = ProcessExists($ProcessNameForKill)
    If $pid <> 0 Then
 	  ProcessClose($pid)

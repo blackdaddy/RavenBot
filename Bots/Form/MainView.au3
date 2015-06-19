@@ -112,6 +112,7 @@ Global $checkBuffHealth[$MaxBattleTypeCount];
 Global $checkBuffAutoSkill[$MaxBattleTypeCount];
 Global $checkBattleEatPotion[$MaxBattleTypeCount];
 Global $comboBattleHealthCondition[$MaxBattleTypeCount];
+Global $comboBattleDodgeInterval[$MaxBattleTypeCount];
 Global $checkItemOptions[$SETTING_IMPORTANT_ITEM_OPTION_COUNT];
 
 $checkBuffAttack[$Id_Adventure] = GUICtrlCreateCheckbox("Buff Attack", $x, $y, $w, 25)
@@ -126,7 +127,9 @@ $checkBattleEatPotion[$Id_Adventure] = GUICtrlCreateCheckbox("Eat health potion"
 $y += ($h + 15)
 GUICtrlCreateLabel("Remaining Health", $x, $y)
 $comboBattleHealthCondition[$Id_Adventure] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
-
+$y += ($h + 15)
+GUICtrlCreateLabel("Dodge Interval", $x, $y)
+$comboBattleDodgeInterval[$Id_Adventure] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
 
 ;-----------------------------------------------------------
 ; Tab : PvP
@@ -152,6 +155,9 @@ $checkBattleEatPotion[$Id_Pvp] = GUICtrlCreateCheckbox("Eat health potion", $x, 
 $y += ($h + 15)
 GUICtrlCreateLabel("Remaining Health", $x, $y)
 $comboBattleHealthCondition[$Id_Pvp] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
+$y += ($h + 15)
+GUICtrlCreateLabel("Dodge Interval", $x, $y)
+$comboBattleDodgeInterval[$Id_Pvp] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
 
 GUICtrlSetState($checkBuffAutoSkill[$Id_Pvp], $GUI_CHECKED)
 ControlDisable($mainView, "", $checkBuffAutoSkill[$Id_Pvp] )
@@ -181,6 +187,9 @@ $checkBattleEatPotion[$Id_Raid] = GUICtrlCreateCheckbox("Eat health potion", $x,
 $y += ($h + 15)
 GUICtrlCreateLabel("Remaining Health", $x, $y)
 $comboBattleHealthCondition[$Id_Raid] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
+$y += ($h + 15)
+GUICtrlCreateLabel("Dodge Interval", $x, $y)
+$comboBattleDodgeInterval[$Id_Raid] = GUICtrlCreateCombo("", $x + 110, $y - 2, 80, $h)
 
 GUICtrlSetState($checkBuffAutoSkill[$Id_Raid], $GUI_CHECKED)
 ControlDisable($mainView, "", $checkBuffAutoSkill[$Id_Raid] )
@@ -273,7 +282,7 @@ Next
 ;==================================
 
 For $i = 1 To $MaxStageNumber
-   If $i = 16 Then
+   If $i = 16 OR $i = 19 Then
 	  GUICtrlSetData($comboStageMajor, "Stage-" & $i & " *")
    Else
 	  GUICtrlSetData($comboStageMajor, "Stage-" & $i)
@@ -304,6 +313,12 @@ Next
 For $i = 10 To 60 Step 10
    For $j = 0 To $MaxBattleTypeCount - 1
 	  GUICtrlSetData($comboBattleHealthCondition[$j], $i & "%")
+   Next
+Next
+
+For $i = 0 To 15 Step 1
+   For $j = 0 To $MaxBattleTypeCount - 1
+	  GUICtrlSetData($comboBattleDodgeInterval[$j], $i & " sec")
    Next
 Next
 

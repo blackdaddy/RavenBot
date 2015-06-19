@@ -14,7 +14,7 @@ Func getMaxStageMinor($stageMajor)
 	  Return 8
    Case 11 To 15
 	  Return 10
-   Case 16 To 18
+   Case 16 To 21
 	  Return 5
    EndSwitch
 
@@ -41,6 +41,9 @@ Func getStaminaCount($stageMajor)
    If $stageMajor <= 16 Then Return 1
    If $stageMajor <= 17 Then Return 2
    If $stageMajor <= 18 Then Return 3
+   If $stageMajor <= 19 Then Return 1
+   If $stageMajor <= 20 Then Return 2
+   If $stageMajor <= 21 Then Return 3
 EndFunc
 
 
@@ -133,7 +136,7 @@ Func getPixelStage($stageMajor, $stageMinor)
 			   $pos[1] = 178
 		 EndSwitch
 
-	  Case 16 To 18
+	  Case 16 To 21
 		 Switch $stageMinor
 			Case 1
 			   $pos[0] = 172
