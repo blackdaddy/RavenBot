@@ -158,7 +158,7 @@ Func doBattle($battleId)
 		 ContinueLoop
 	  EndIf
 
-	  If Int(TimerDiff($hTimerDodge)) > $intervalDodge Then
+	  If Int(TimerDiff($hTimerDodge)) > ($intervalDodge * 1000) Then
 		 ClickPos($BATTLE_DODGE_BUTTON_POS, 100, 2)
 		 $hTimerDodge = TimerInit()
 		 _Sleep(50)
