@@ -119,9 +119,12 @@ Func doPvpBattleScreen()
 
    Local $hTimer = TimerInit()
    Local $hTimerEatPotion = TimerInit()
+   Local $hTimerDodge = TimerInit()
    Local $eatPotionFlag = False
+   Local $index = 0
 
    While 1
+	  $index = $index + 1
 	  If Int(TimerDiff($hTimer)) > 300000 Then
 		 SetLog("Unexpected battle detected...", $COLOR_RED)
 		 SaveImageToFile("pvp_error");
@@ -144,13 +147,25 @@ Func doPvpBattleScreen()
 	  ; To remove 3 continuous reward text
 	  Click(186, 352)
 
-	  ClickPos($BATTLE_DODGE_BUTTON_POS, 500, 2)
+	  ; Check Dodge skill interval
+	  Local $intervalDodge = _GUICtrlComboBox_GetCurSel($comboBattleDodgeInterval[$Id_Pvp]);
 
-	  If _Sleep(2000) Then Return
+	  If $intervalDodge > 0 Then
+		 If Int(TimerDiff($hTimerDodge)) > $intervalDodge Then
+			ClickPos($BATTLE_DODGE_BUTTON_POS, 100, 2)
+			$hTimerDodge = TimerInit()
+		 EndIf
+	  EndIf
 
-	  ClickPos($BATTLE_DODGE_BUTTON_POS, 500, 2)
-
-	  ClickPos($BATTLE_SKILL4_BUTTON_POS, 200, 4)
+	  ; Only first time, cast Skill 4 for oneshot onekill
+	  If $index = 1 Then
+		 _console("### Cast powerfull skill 4");
+		 If _Sleep(1300) Then Return
+		 ClickPos($BATTLE_DODGE_BUTTON_POS, 400, 2)
+		 If _Sleep(1300) Then Return
+		 ClickPos($BATTLE_DODGE_BUTTON_POS, 400, 2)
+		 ClickPos($BATTLE_SKILL4_BUTTON_POS, 200, 4)
+	  EndIf
 
 	  If $setting_eat_potion[$Id_Pvp] Then
 		 If Int(TimerDiff($hTimerEatPotion)) > $PVP_POTION_EAT_DELAY_MSEC Then
