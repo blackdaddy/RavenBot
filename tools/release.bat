@@ -2,7 +2,7 @@
 @SET TARGET=RavenBot
 @SET TARGET_DIR=RavenBot
 @SET ZIP_7Z_FILE=7z\7z.exe
-@SET VER=v2_4
+@SET VER=v2_5
 @SET ARCHIVE_FILE_NAME=%TARGET%_%VER%.zip
 
 rmdir /Q /S %TARGET_DIR%\
